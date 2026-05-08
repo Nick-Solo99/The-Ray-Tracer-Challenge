@@ -6,6 +6,7 @@
 #define RTC_CANVAS_H
 
 #include <vector>
+#include <string>
 
 #include "tuples/Tuple.h"
 
@@ -21,6 +22,9 @@ namespace rtc::canvas {
 
         void write_pixel(const int x, const int y, const Color& c) { pixels[x + y * width] = c;}
         Color pixel_at(const int x, const int y) const { return pixels[x + y * width]; }
+
+        std::string canvas_to_ppm() const;
+
     };
 }
 
