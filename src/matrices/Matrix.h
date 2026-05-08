@@ -5,12 +5,14 @@
 #ifndef RTC_MATRIX_H
 #define RTC_MATRIX_H
 
+#include <iostream>
 #include <vector>
 #include "tuples/Tuple.h"
 
-using namespace rtc::tuples;
 
 namespace rtc::matrices {
+    using Tuple = tuples::Tuple;
+
     class Matrix {
     private:
         std::vector<float> data;
@@ -29,8 +31,18 @@ namespace rtc::matrices {
         Tuple operator*(const Tuple& t) const;
 
         static Matrix identity(size_t n = 4);
-        Matrix transpose() const;
+        [[nodiscard]] Matrix transpose() const;
+        [[nodiscard]] float determinant() const;
+        [[nodiscard]] Matrix submatrix(size_t removeRow, size_t removeCol) const;
+        [[nodiscard]] float minor(size_t removeRow, size_t removeCol) const;
+        [[nodiscard]] float cofactor(size_t removeRow, size_t removeCol) const;
+        [[nodiscard]] bool invertible() const;
+        [[nodiscard]] Matrix inverse() const;
+        [[nodiscard]] size_t getRows() const { return rows; }
+        [[nodiscard]] size_t getColumns() const { return columns; }
     };
+
+    std::ostream& operator<<(std::ostream& s, const Matrix& m);
 }
 
 #endif //RTC_MATRIX_H
