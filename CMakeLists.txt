@@ -11,6 +11,8 @@ add_library(rtc_core
         src/canvas/Canvas.h
         src/matrices/Matrix.cpp
         src/matrices/Matrix.h
+        src/transformations/Transformations.cpp
+        src/transformations/Transformations.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -20,6 +22,7 @@ add_executable(tests
         tests/tuples_tests.cpp
         tests/canvas_tests.cpp
         tests/matrices_tests.cpp
+        tests/transformations_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core
