@@ -29,6 +29,7 @@ namespace rtc::matrices {
         Tuple operator*(const Tuple& t) const;
 
         static Matrix identity(size_t n = 4);
+        Matrix transpose() const;
     };
 }
 

@@ -141,3 +141,35 @@ SCENARIO("Multiplying a matrix by the identity matrix") {
         }
     }
 }
+
+SCENARIO("Multiplying the identity matrix by a tuple") {
+    GIVEN("a <- tuple(1, 2, 3, 4)") {
+        Tuple a = tuple(1, 2, 3, 4);
+
+        THEN("Matrix::identity() * a = a") {
+            REQUIRE(Matrix::identity() * a == a);
+        }
+    }
+}
+
+SCENARIO("Transposing a matrix") {
+    GIVEN("A <- {{0, 9, 3, 0}, {9, 8, 0, 8}, {1, 8, 5, 3}, {0, 0, 5, 8}}") {
+        Matrix A({{0, 9, 3, 0}, {9, 8, 0, 8}, {1, 8, 5, 3}, {0, 0, 5, 8}});
+
+        THEN("A.transpose() = Matrix({{0, 9, 1, 0}, {9, 8, 8, 0}, {3, 0, 5, 5}, {0, 8, 3, 8}})") {
+            Matrix result({{0, 9, 1, 0}, {9, 8, 8, 0}, {3, 0, 5, 5}, {0, 8, 3, 8}});
+
+            REQUIRE(A.transpose() == result);
+        }
+    }
+}
+
+SCENARIO("Transposing the identity matrix") {
+    GIVEN("A <- Matrix::identity().transpose()") {
+        Matrix A = Matrix::identity().transpose();
+        THEN("A = Matrix::identity()") {
+            REQUIRE(A == Matrix::identity());
+        }
+    }
+}
+

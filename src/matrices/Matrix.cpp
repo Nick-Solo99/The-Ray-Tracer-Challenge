@@ -88,4 +88,14 @@ namespace rtc::matrices {
         }
         return result;
     }
+
+    Matrix Matrix::transpose() const {
+        Matrix result(rows, columns);
+        for (size_t r = 0; r < rows; r++) {
+            for (size_t c = 0; c < columns; c++) {
+                result[c, r] = (*this)[r, c];
+            }
+        }
+        return result;
+    }
 }
