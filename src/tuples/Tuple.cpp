@@ -70,36 +70,6 @@ namespace rtc::tuples {
         return *this;
     }
 
-    float & Tuple::operator[](size_t i) {
-        switch (i) {
-            case 0:
-                return x;
-            case 1:
-                return y;
-            case 2:
-                return z;
-            case 3:
-                return w;
-            default:
-                throw std::out_of_range("invalid index");
-        }
-    }
-
-    const float & Tuple::operator[](size_t i) const {
-        switch (i) {
-            case 0:
-                return x;
-            case 1:
-                return y;
-            case 2:
-                return z;
-            case 3:
-                return w;
-            default:
-                throw std::out_of_range("invalid index");
-        }
-    }
-
 
     Tuple tuple(const float x, const float y, const float z, const float w) {
         return {x, y, z, w};

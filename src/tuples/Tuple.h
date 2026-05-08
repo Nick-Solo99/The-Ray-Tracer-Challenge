@@ -28,8 +28,6 @@ namespace rtc::tuples {
         Tuple operator/(float s) const;
         Tuple& operator+=(const Tuple& t);
         Tuple& operator-=(const Tuple& t);
-        float& operator[](size_t i);
-        const float& operator[](size_t i) const;
     };
     static_assert(sizeof(Tuple) == sizeof(float) * 4, "Tuple size mismatch");
 
