@@ -1,5 +1,5 @@
 //
-// Created by xGrim on 2026-05-07.
+// Created by Nicholas Solomon on 2026-05-07.
 //
 
 #include <catch2/catch_test_macros.hpp>
@@ -12,7 +12,7 @@ constexpr float EPSILON = 0.00001f;
 
 SCENARIO("A tuple with w=1.0 is a point") {
     GIVEN("a <- tuple(4.3, -4.2, 3.1, 1.0)") {
-        Tuple a(4.3f, -4.2f, 3.1f, 1.0f);
+        Tuple a = tuple(4.3f, -4.2f, 3.1f, 1.0f);
 
         THEN("it has correct components") {
             REQUIRE(a.x == 4.3f);
@@ -33,7 +33,7 @@ SCENARIO("A tuple with w=1.0 is a point") {
 
 SCENARIO("A tuple with w=0 is a vector") {
     GIVEN("a <- tuple(4.3, -4.2, 3.1, 1.0)") {
-        Tuple a(4.3f, -4.2f, 3.1f, 0.0f);
+        Tuple a = tuple(4.3f, -4.2f, 3.1f, 0.0f);
 
         THEN("it has correct components") {
             REQUIRE(a.x == 4.3f);
@@ -284,6 +284,18 @@ SCENARIO("The cross product of two vectors") {
 
         AND_THEN("cross(b, a) = vector(1, -2, 1)") {
             REQUIRE(cross(b, a) == vector(1, -2, 1));
+        }
+    }
+}
+
+SCENARIO("Colors are (red, green, blue) tuples") {
+    GIVEN("c <- color(-0.5, 0.4, 1.7)") {
+        const Tuple c = color(-0.5, 0.4, 1.7);
+
+        THEN("c.r = -0.5, c.g = 0.4, c.b = 1.7") {
+            REQUIRE(std::fabs(c.r + 0.5) < EPSILON);
+            REQUIRE(std::fabs(c.g - 0.4) < EPSILON);
+            REQUIRE(std::fabs(c.b - 1.7) < EPSILON);
         }
     }
 }

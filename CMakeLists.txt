@@ -20,6 +20,15 @@ target_link_libraries(tests
         PRIVATE Catch2::Catch2WithMain
 )
 
+add_executable(Exercises
+        exercises/ConsoleCannon.cpp
+
+)
+
+target_link_libraries(Exercises
+        PRIVATE rtc_core
+)
+
 add_executable(RTC main.cpp)
 
 target_link_libraries(RTC
