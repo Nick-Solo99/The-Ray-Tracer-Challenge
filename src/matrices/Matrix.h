@@ -6,6 +6,9 @@
 #define RTC_MATRIX_H
 
 #include <vector>
+#include "tuples/Tuple.h"
+
+using namespace rtc::tuples;
 
 namespace rtc::matrices {
     class Matrix {
@@ -19,8 +22,11 @@ namespace rtc::matrices {
         Matrix(std::initializer_list<std::initializer_list<float>> list);
 
         float &operator[](size_t r, size_t c);
+        const float &operator[](size_t r, size_t c) const;
         bool operator==(const Matrix& m) const;
         bool operator!=(const Matrix& m) const { return !(*this == m); }
+        Matrix operator*(const Matrix& m) const;
+        Tuple operator*(const Tuple& t) const;
     };
 }
 

@@ -27,6 +27,14 @@ namespace rtc::matrices {
         return data[r * columns + c];
     }
 
+    const float & Matrix::operator[](size_t r, size_t c) const {
+        if (r >= rows || c >= columns) {
+            throw std::out_of_range("invalid index");
+        }
+
+        return data[r * columns + c];
+    }
+
     bool Matrix::operator==(const Matrix &m) const {
         if (rows != m.rows || columns != m.columns) {
             return false;
@@ -39,5 +47,37 @@ namespace rtc::matrices {
             }
         }
         return true;
+    }
+
+    Matrix Matrix::operator*(const Matrix &m) const {
+        if (columns != m.rows) {
+            throw std::invalid_argument("left matrix columns must be equal to right matrix rows");
+        }
+        Matrix result(rows, columns);
+        for (size_t r = 0; r < rows; r++) {
+            for (size_t c = 0; c < m.columns; c++) {
+                float sum = 0.0f;
+                for (size_t k = 0; k < columns; k++) {
+                    sum += (*this)[r, k] * m[k, c];
+                }
+                result[r, c] = sum;
+            }
+        }
+        return result;
+    }
+
+    Tuple Matrix::operator*(const Tuple &t) const {
+        if (columns != 4) {
+            throw std::invalid_argument("left matrix columns must be equal to right tuple length");
+        }
+        Tuple result;
+        for (size_t r = 0; r < rows; ++r) {
+            float sum = 0.0f;
+            for (size_t c = 0; c < columns; ++c) {
+                sum += (*this)[r, c] * t[c];
+            }
+            result[r] = sum;
+        }
+        return result;
     }
 }
