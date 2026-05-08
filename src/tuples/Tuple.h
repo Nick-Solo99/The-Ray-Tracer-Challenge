@@ -1,5 +1,5 @@
 //
-// Created by xGrim on 2026-05-07.
+// Created by Nicholas Solomon on 2026-05-07.
 //
 
 #ifndef RTC_TUPLE_H
@@ -9,7 +9,11 @@
 namespace rtc::tuples {
 
     struct Tuple {
-        float x, y, z, w;
+        union {
+            struct {float x, y, z, w;};
+            struct {float r, g, b, a;};
+        };
+
 
         [[nodiscard]] bool isPoint() const;
         [[nodiscard]] bool isVector() const;
@@ -20,19 +24,28 @@ namespace rtc::tuples {
         Tuple operator-(const Tuple& t) const;
         Tuple operator-() const;
         Tuple operator*(float s) const;
+        Tuple operator*(const Tuple& t) const;
         Tuple operator/(float s) const;
         Tuple& operator+=(const Tuple& t);
         Tuple& operator-=(const Tuple& t);
     };
+    static_assert(sizeof(Tuple) == sizeof(float) * 4, "Tuple size mismatch");
+
+    inline Tuple operator*(const float s, const Tuple& t) { return t * s; }
 
     Tuple tuple(float x, float y, float z, float w);
     Tuple point(float x, float y, float z);
     Tuple vector(float x, float y, float z);
+    Tuple color(float r, float g, float b);
 
-    float magnitude(const Tuple& t);
-    float dot(const Tuple& a, const Tuple& b);
-    Tuple normalize(const Tuple& t);
-    Tuple cross(const Tuple& a, const Tuple& b);
+    [[nodiscard]] float magnitude(const Tuple& t);
+    [[nodiscard]] float dot(const Tuple& a, const Tuple& b);
+    [[nodiscard]] Tuple normalize(const Tuple& t);
+    [[nodiscard]] Tuple cross(const Tuple& a, const Tuple& b);
+
+    using Point = Tuple;
+    using Vector = Tuple;
+    using Color = Tuple;
 }
 // rtc
 
