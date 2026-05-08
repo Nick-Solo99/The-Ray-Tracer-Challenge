@@ -8,6 +8,8 @@
 
 namespace rtc::matrices {
 
+    constexpr float EPSILON = 0.00001f;
+
     Matrix::Matrix(std::initializer_list<std::initializer_list<float> > list) {
         rows = list.size();
         columns = list.begin()->size();
@@ -41,7 +43,7 @@ namespace rtc::matrices {
         }
         for (size_t r = 0; r < rows; r++) {
             for (size_t c = 0; c < columns; c++) {
-                if (data[r * columns + c] != m.data[r * columns + c]) {
+                if (std::fabs(data[r * columns + c] - m.data[r * columns + c]) > EPSILON) {
                     return false;
                 }
             }
@@ -53,7 +55,7 @@ namespace rtc::matrices {
         if (columns != m.rows) {
             throw std::invalid_argument("left matrix columns must be equal to right matrix rows");
         }
-        Matrix result(rows, columns);
+        Matrix result(rows, m.columns);
         for (size_t r = 0; r < rows; r++) {
             for (size_t c = 0; c < m.columns; c++) {
                 float sum = 0.0f;
@@ -90,12 +92,92 @@ namespace rtc::matrices {
     }
 
     Matrix Matrix::transpose() const {
-        Matrix result(rows, columns);
+        Matrix result(columns, rows);
         for (size_t r = 0; r < rows; r++) {
             for (size_t c = 0; c < columns; c++) {
                 result[c, r] = (*this)[r, c];
             }
         }
         return result;
+    }
+
+    float Matrix::determinant() const {
+        if (rows != columns) {
+            throw std::invalid_argument("determinant requires a square matrix");
+        }
+
+        if (rows == 2) {
+            return (*this)[0, 0] * (*this)[1, 1] - (*this)[0, 1] * (*this)[1, 0];
+        }
+
+        float det = 0.0f;
+        for (size_t c = 0; c < columns; ++c) {
+            det += (*this)[0, c] * cofactor(0, c);
+        }
+        return det;
+    }
+
+    Matrix Matrix::submatrix(const size_t removeRow,const size_t removeCol) const {
+
+        if (removeRow >= rows || removeCol >= columns) {
+            throw std::out_of_range("invalid index");
+        }
+
+        Matrix result(rows - 1, columns - 1);
+        size_t r2 = 0;
+        for (size_t r = 0; r < rows; r++) {
+            if (r == removeRow) { continue; }
+            size_t c2 = 0;
+            for (size_t c = 0; c < columns; c++) {
+                if (c == removeCol) { continue; }
+                result[r2, c2] = (*this)[r, c];
+                c2++;
+            }
+            r2++;
+        }
+        return result;
+    }
+
+    float Matrix::minor(const size_t removeRow, const size_t removeCol) const {
+        return submatrix(removeRow, removeCol).determinant();
+    }
+
+    float Matrix::cofactor(const size_t removeRow, const size_t removeCol) const {
+        return (removeRow + removeCol) % 2 != 0 ? -minor(removeRow, removeCol) : minor(removeRow, removeCol);
+    }
+
+    bool Matrix::invertible() const {
+        return std::fabs(determinant()) > EPSILON;
+    }
+
+    Matrix Matrix::inverse() const {
+        if (!invertible()) {
+            throw std::invalid_argument("matrix is not invertible");
+        }
+        Matrix result(rows, columns);
+        const float det = determinant();
+        for (size_t r = 0; r < rows; r++) {
+            for (size_t c = 0; c < columns; c++) {
+                result[c, r] = cofactor(r, c) / det;
+            }
+        }
+        return result;
+    }
+
+    std::ostream& operator<<(std::ostream& s, const Matrix& m) {
+        for (size_t r = 0; r < m.getRows(); ++r) {
+            s << "[ ";
+            for (size_t c = 0; c < m.getColumns(); ++c) {
+                s << m[r, c];
+                if (c + 1 < m.getColumns()) {
+                    s << ", ";
+                }
+            }
+            s << " ]";
+            if (r + 1 < m.getRows()) {
+                s << "\n";
+            }
+        }
+        return s;
     }
 }

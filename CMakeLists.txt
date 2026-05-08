@@ -26,12 +26,20 @@ target_link_libraries(tests
         PRIVATE Catch2::Catch2WithMain
 )
 
-add_executable(Exercises
+add_executable(Cannon
         exercises/Cannon.cpp
 
 )
 
-target_link_libraries(Exercises
+target_link_libraries(Cannon
+        PRIVATE rtc_core
+)
+
+add_executable(MatrixExperiments
+        exercises/MatrixExperiments.cpp
+)
+
+target_link_libraries(MatrixExperiments
         PRIVATE rtc_core
 )
 
