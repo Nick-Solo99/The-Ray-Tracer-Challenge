@@ -46,6 +46,10 @@ namespace rtc::tuples {
         return {x * s, y * s, z * s, w * s};
     }
 
+    Tuple Tuple::operator*(const Tuple& t) const {
+        return {x * t.x, y * t.y, z * t.z, w * t.w};
+    }
+
     Tuple Tuple::operator/(const float s) const {
         return {x / s, y / s, z / s, w / s};
     }

@@ -24,10 +24,14 @@ namespace rtc::tuples {
         Tuple operator-(const Tuple& t) const;
         Tuple operator-() const;
         Tuple operator*(float s) const;
+        Tuple operator*(const Tuple& t) const;
         Tuple operator/(float s) const;
         Tuple& operator+=(const Tuple& t);
         Tuple& operator-=(const Tuple& t);
     };
+    static_assert(sizeof(Tuple) == sizeof(float) * 4, "Tuple size mismatch");
+
+    inline Tuple operator*(const float s, const Tuple& t) { return t * s; }
 
     Tuple tuple(float x, float y, float z, float w);
     Tuple point(float x, float y, float z);

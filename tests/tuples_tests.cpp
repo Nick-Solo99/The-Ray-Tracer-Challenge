@@ -160,6 +160,16 @@ SCENARIO("Multiplying a tuple by a scalar") {
     }
 }
 
+SCENARIO("Multiplying a scalar by a tuple") {
+    GIVEN("a <- tuple(1, -2, 3, -4)") {
+        const Tuple a = tuple(1, -2, 3, -4);
+
+        THEN("3.5 * a = tuple(0.5, -1, 1.5, -2") {
+            REQUIRE(3.5 * a == tuple(3.5, -7, 10.5, -14));
+        }
+    }
+}
+
 SCENARIO("Multiplying a tuple by a fraction") {
     GIVEN("a <- tuple(1, -2, 3, -4)") {
         const Tuple a = tuple(1, -2, 3, -4);
@@ -296,6 +306,53 @@ SCENARIO("Colors are (red, green, blue) tuples") {
             REQUIRE(std::fabs(c.r + 0.5) < EPSILON);
             REQUIRE(std::fabs(c.g - 0.4) < EPSILON);
             REQUIRE(std::fabs(c.b - 1.7) < EPSILON);
+        }
+    }
+}
+
+SCENARIO("Adding colors") {
+    GIVEN("c1 <- color(0.9, 0.6, 0.75), c2 <- color(0.7, 0.1, 0.25") {
+        const Tuple c1 = color(0.9, 0.6, 0.75);
+        const Tuple c2 = color(0.7, 0.1, 0.25);
+
+        THEN("c1 + c2 = color(1.6, 0.7, 1.0)") {
+            REQUIRE(c1 + c2 == color(1.6, 0.7, 1.0));
+        }
+    }
+}
+
+SCENARIO("Subtracting colors") {
+    GIVEN("c1 <- color(0.9, 0.6, 0.75), c2 <- color(0.7, 0.1, 0.25") {
+        const Tuple c1 = color(0.9, 0.6, 0.75);
+        const Tuple c2 = color(0.7, 0.1, 0.25);
+
+        THEN("c1 - c2 = color(0.2, 0,5, 0.5)") {
+            REQUIRE(c1 - c2 == color(0.2, 0.5, 0.5));
+        }
+    }
+}
+
+SCENARIO("Multiplying a color by a scalar") {
+    GIVEN("c <- color(0.2, 0.3, 0.4)") {
+        const Tuple c = color(0.2, 0.3, 0.4);
+
+        THEN("c * 2 = color(0.4, 0.6, 0.8)") {
+            REQUIRE(c * 2 == color(0.4, 0.6, 0.8));
+        }
+
+        AND_THEN("2 * c = color(0.4, 0.6, 0.8)") {
+            REQUIRE(2 * c == color(0.4, 0.6, 0.8));
+        }
+    }
+}
+
+SCENARIO("Multiplying colors") {
+    GIVEN("c1 <- color(1, 0.2, 0.4), c2 <- color(0.9, 1, 0.1)") {
+        const Tuple c1 = color(1, 0.2, 0.4);
+        const Tuple c2 = color(0.9, 1, 0.1);
+
+        THEN("c1 * c2 = color(0.9, 0.2, 0.04)") {
+            REQUIRE(c1 * c2 == color(0.9, 0.2, 0.04));
         }
     }
 }
