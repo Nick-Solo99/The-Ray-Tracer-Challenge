@@ -42,6 +42,10 @@ namespace rtc::tuples {
     [[nodiscard]] float dot(const Tuple& a, const Tuple& b);
     [[nodiscard]] Tuple normalize(const Tuple& t);
     [[nodiscard]] Tuple cross(const Tuple& a, const Tuple& b);
+
+    using Point = Tuple;
+    using Vector = Tuple;
+    using Color = Tuple;
 }
 // rtc
 
