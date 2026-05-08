@@ -27,6 +27,8 @@ namespace rtc::matrices {
         bool operator!=(const Matrix& m) const { return !(*this == m); }
         Matrix operator*(const Matrix& m) const;
         Tuple operator*(const Tuple& t) const;
+
+        static Matrix identity(size_t n = 4);
     };
 }
 

@@ -131,3 +131,13 @@ SCENARIO("A Matrix multiplied by a tuple") {
         }
     }
 }
+
+SCENARIO("Multiplying a matrix by the identity matrix") {
+    GIVEN("A <- {{0, 1, 2, 4}, {1, 2, 4, 8}, {2, 4, 8, 16}, {4, 8, 16, 32}}") {
+        Matrix A({{0, 1, 2, 4}, {1, 2, 4, 8}, {2, 4, 8, 16}, {4, 8, 16, 32}});
+
+        THEN("A * Matrix::identity() = A") {
+            REQUIRE(A * Matrix::identity() == A);
+        }
+    }
+}

@@ -80,4 +80,12 @@ namespace rtc::matrices {
         }
         return result;
     }
+
+    Matrix Matrix::identity(const size_t n) {
+        Matrix result(n, n);
+        for (size_t i = 0; i < n; ++i) {
+            result[i, i] = 1.0f;
+        }
+        return result;
+    }
 }
