@@ -10,7 +10,9 @@ namespace rtc::matrices {
 }
 
 namespace rtc::transformations {
-    matrices::Matrix translation(const float x, const float y, const float z);
+    using Matrix = matrices::Matrix;
+    Matrix translation(const float x, const float y, const float z);
+    Matrix scaling(const float x, const float y, const float z);
 }
 
 #endif //RTC_TRANSFORMATIONS_H

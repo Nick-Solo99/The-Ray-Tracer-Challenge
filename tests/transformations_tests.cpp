@@ -42,3 +42,46 @@ SCENARIO("Translation does not affect vectors") {
         }
     }
 }
+
+SCENARIO("A Scaling matrix applied to a point") {
+    GIVEN("transform <- scaling(2, 3, 4), p <- point(-4, 6, 8)") {
+        const Matrix transform = scaling(2, 3, 4);
+        const Point p = point(-4, 6, 8);
+        THEN("transform * p = point(-8, 18, 32)") {
+            REQUIRE(transform * p == point(-8, 18, 32));
+        }
+    }
+}
+
+SCENARIO("A Scaling matrix applied to a vector") {
+    GIVEN("transform <- scaling(2, 3, 4), v <- vector(-4, 6, 8)") {
+        const Matrix transform = scaling(2, 3, 4);
+        const Vector v = vector(-4, 6, 8);
+        THEN("transform * v = vector(-8, 18, 32)") {
+            REQUIRE(transform * v == vector(-8, 18, 32));
+        }
+    }
+}
+
+SCENARIO("Multiplying by the inverse of a scaling matrix") {
+    GIVEN("transform <- scaling(2, 3, 4), inv <- transform.inverse(), v <- vector(-4, 6, 8)") {
+        const Matrix transform = scaling(2, 3, 4);
+        const Matrix inv = transform.inverse();
+        const Vector v = vector(-4, 6, 8);
+
+        THEN("inv * v = vector(-2, 2, 2)") {
+            REQUIRE(inv * v == vector(-2, 2, 2));
+        }
+    }
+}
+
+SCENARIO("Reflection is scaling by a negative value") {
+    GIVEN("transform <- scaling(-1, 1, 1), p <- point(2, 3, 4)") {
+        const Matrix transform = scaling(-1, 1, 1);
+        const Point p = point(2, 3, 4);
+
+        THEN("transform * p = point(-2, 3, 4)") {
+            REQUIRE(transform * p == point(-2, 3, 4));
+        }
+    }
+}

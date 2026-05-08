@@ -16,4 +16,12 @@ namespace rtc::transformations {
         return result;
     }
 
+    Matrix scaling(const float x, const float y, const float z) {
+        Matrix result = Matrix::identity();
+        result[0, 0] = x;
+        result[1, 1] = y;
+        result[2, 2] = z;
+        return result;
+    }
+
 }
