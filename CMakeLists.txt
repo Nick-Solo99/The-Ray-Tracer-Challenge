@@ -24,7 +24,7 @@ target_link_libraries(tests
 )
 
 add_executable(Exercises
-        exercises/ConsoleCannon.cpp
+        exercises/Cannon.cpp
 
 )
 
