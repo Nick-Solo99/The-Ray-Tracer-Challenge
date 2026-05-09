@@ -6,10 +6,13 @@
 
 #include "matrices/Matrix.h"
 #include "transformations/Transformations.h"
+#include <numbers>
 
 using namespace rtc::transformations;
 using namespace rtc::matrices;
 using namespace rtc::tuples;
+
+constexpr float PI = std::numbers::pi_v<float>;
 
 SCENARIO("Multiplying by a translation matrix") {
     GIVEN("transform <- translation(5, -3, 2), p <- point(-3, 4, 5)") {
@@ -82,6 +85,34 @@ SCENARIO("Reflection is scaling by a negative value") {
 
         THEN("transform * p = point(-2, 3, 4)") {
             REQUIRE(transform * p == point(-2, 3, 4));
+        }
+    }
+}
+
+SCENARIO("Rotating a point around the x axis") {
+    GIVEN("p <- point(0, 1, 0), half_quarter <- rotation_x(PI / 4), full_quarter <- rotation_x(PI / 2)") {
+        const Point p = point(0, 1, 0);
+        const Matrix half_quarter = rotation_x(PI / 4);
+        const Matrix full_quarter = rotation_x(PI / 2);
+
+        THEN("half_quarter * p = point(0, sqrt(2)/2, sqrt(2)/2)") {
+            REQUIRE(half_quarter * p == point(0, sqrt(2)/2, sqrt(2)/2));
+        }
+
+        AND_THEN("full_quarter * p = point(0, 0, 1") {
+            REQUIRE(full_quarter * p == point(0, 0, 1));
+        }
+    }
+}
+
+SCENARIO("The inverse of an x rotation rotates in the opposite direction") {
+    GIVEN("p <- point(0, 1, 0), half_quarter <- rotation_x(PI / 4), inv <- half_quarter.inverse()") {
+        const Point p = point(0, 1, 0);
+        const Matrix half_quarter = rotation_x(PI / 4);
+        const Matrix inv = half_quarter.inverse();
+
+        THEN("inv * p = point(0, sqrt(2)/2, -sqrt(2)/2)") {
+            REQUIRE(inv * p == point(0, sqrt(2)/2, -sqrt(2)/2));
         }
     }
 }

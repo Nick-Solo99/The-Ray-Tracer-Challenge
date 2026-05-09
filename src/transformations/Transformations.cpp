@@ -4,6 +4,10 @@
 
 #include "Transformations.h"
 #include "matrices/Matrix.h"
+#include <cmath>
+#include <numbers>
+
+constexpr float PI = std::numbers::pi_v<float>;
 
 namespace rtc::transformations {
     using Matrix = matrices::Matrix;
@@ -21,6 +25,15 @@ namespace rtc::transformations {
         result[0, 0] = x;
         result[1, 1] = y;
         result[2, 2] = z;
+        return result;
+    }
+
+    Matrix rotation_x(const float radians) {
+        Matrix result = Matrix::identity();
+        result[1, 1] = cosf(radians);
+        result[1, 2] = -sinf(radians);
+        result[2, 1] = sinf(radians);
+        result[2, 2] = cosf(radians);
         return result;
     }
 
