@@ -37,4 +37,22 @@ namespace rtc::transformations {
         return result;
     }
 
+    Matrix rotation_y(const float radians) {
+        Matrix result = Matrix::identity();
+        result[0, 0] = cosf(radians);
+        result[0, 2] = sinf(radians);
+        result[2, 0] = -sinf(radians);
+        result[2, 2] = cosf(radians);
+        return result;
+    }
+
+    Matrix rotation_z(const float radians) {
+        Matrix result = Matrix::identity();
+        result[0, 0] = cosf(radians);
+        result[0, 1] = -sinf(radians);
+        result[1, 0] = sinf(radians);
+        result[1, 1] = cosf(radians);
+        return result;
+    }
+
 }

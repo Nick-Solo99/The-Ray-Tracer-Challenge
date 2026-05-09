@@ -96,7 +96,7 @@ SCENARIO("Rotating a point around the x axis") {
         const Matrix full_quarter = rotation_x(PI / 2);
 
         THEN("half_quarter * p = point(0, sqrt(2)/2, sqrt(2)/2)") {
-            REQUIRE(half_quarter * p == point(0, sqrt(2)/2, sqrt(2)/2));
+            REQUIRE(half_quarter * p == point(0, sqrtf(2)/2, sqrtf(2)/2));
         }
 
         AND_THEN("full_quarter * p = point(0, 0, 1") {
@@ -112,7 +112,39 @@ SCENARIO("The inverse of an x rotation rotates in the opposite direction") {
         const Matrix inv = half_quarter.inverse();
 
         THEN("inv * p = point(0, sqrt(2)/2, -sqrt(2)/2)") {
-            REQUIRE(inv * p == point(0, sqrt(2)/2, -sqrt(2)/2));
+            REQUIRE(inv * p == point(0, sqrtf(2)/2, -sqrtf(2)/2));
+        }
+    }
+}
+
+SCENARIO("Rotating a point around the y axis") {
+    GIVEN("p <- point(0, 0, 1), half_quarter <- rotation_y(PI / 4), full_quarter <- rotation_y(PI / 2)") {
+        const Point p = point(0, 0, 1);
+        const Matrix half_quarter = rotation_y(PI / 4);
+        const Matrix full_quarter = rotation_y(PI / 2);
+
+        THEN("half_quarter * p = point(sqrt(2)/2, 0, sqrt(2)/2") {
+            REQUIRE(half_quarter * p == point(sqrtf(2)/2, 0, sqrtf(2)/2));
+        }
+
+        AND_THEN("full_quarter * p = point(1, 0, 0)") {
+            REQUIRE(full_quarter * p == point(1, 0, 0));
+        }
+    }
+}
+
+SCENARIO("Rotating a point around the z axis") {
+    GIVEN("p <- point(0, 1, 0), half_quarter <- rotation_z(PI/4), full_quarter <- rotation_z(PI / 2)") {
+        const Point p = point(0, 1, 0);
+        const Matrix half_quarter = rotation_z(PI / 4);
+        const Matrix full_quarter = rotation_z(PI / 2);
+
+        THEN("half_quarter * p = point(-sqrt(2)/2, sqrt(2)/2, 0)") {
+            REQUIRE(half_quarter * p == point(-sqrt(2)/2, sqrt(2)/2, 0));
+        }
+
+        AND_THEN("full_quarter * p = point(-1, 0, 0") {
+            REQUIRE(full_quarter * p == point(-1, 0, 0));
         }
     }
 }

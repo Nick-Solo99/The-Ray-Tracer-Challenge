@@ -14,6 +14,8 @@ namespace rtc::transformations {
     Matrix translation(const float x, const float y, const float z);
     Matrix scaling(const float x, const float y, const float z);
     Matrix rotation_x(const float radians);
+    Matrix rotation_y(const float radians);
+    Matrix rotation_z(const float radians);
 }
 
 #endif //RTC_TRANSFORMATIONS_H
