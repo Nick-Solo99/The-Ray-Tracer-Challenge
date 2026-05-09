@@ -16,6 +16,7 @@ namespace rtc::transformations {
     Matrix rotation_x(const float radians);
     Matrix rotation_y(const float radians);
     Matrix rotation_z(const float radians);
+    Matrix shearing(const float xy, const float xz, const float yx, const float yz, const float zx, const float zy);
 }
 
 #endif //RTC_TRANSFORMATIONS_H

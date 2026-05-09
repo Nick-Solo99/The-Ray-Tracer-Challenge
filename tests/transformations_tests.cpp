@@ -148,3 +148,69 @@ SCENARIO("Rotating a point around the z axis") {
         }
     }
 }
+
+SCENARIO("A shearing transformation moves x in proportion to y") {
+    GIVEN("transform <- shearing(1, 0, 0, 0, 0, 0), p <- point(2, 3, 4)") {
+        const Matrix transform = shearing(1, 0, 0, 0, 0, 0);
+        const Point p = point(2, 3, 4);
+
+        THEN("transform * p = point(5, 3, 4") {
+            REQUIRE(transform * p == point(5, 3, 4));
+        }
+    }
+}
+
+SCENARIO("A shearing transformation moves x in proportion to z") {
+    GIVEN("transform <- shearing(0, 1, 0, 0, 0, 0), p <- point(2, 3, 4)") {
+        const Matrix transform = shearing(0, 1, 0, 0, 0, 0);
+        const Point p = point(2, 3, 4);
+
+        THEN("transform * p = point(6, 3, 4") {
+            REQUIRE(transform * p == point(6, 3, 4));
+        }
+    }
+}
+
+SCENARIO("A shearing transformation moves y in proportion to x") {
+    GIVEN("transform <- shearing(0, 0, 1, 0, 0, 0), p <- point(2, 3, 4)") {
+        const Matrix transform = shearing(0, 0, 1, 0, 0, 0);
+        const Point p = point(2, 3, 4);
+
+        THEN("transform * p = point(2, 5, 4") {
+            REQUIRE(transform * p == point(2, 5, 4));
+        }
+    }
+}
+
+SCENARIO("A shearing transformation moves y in proportion to z") {
+    GIVEN("transform <- shearing(0, 0, 0, 1, 0, 0), p <- point(2, 3, 4)") {
+        const Matrix transform = shearing(0, 0, 0, 1, 0, 0);
+        const Point p = point(2, 3, 4);
+
+        THEN("transform * p = point(2, 7, 4") {
+            REQUIRE(transform * p == point(2, 7, 4));
+        }
+    }
+}
+
+SCENARIO("A shearing transformation moves z in proportion to x") {
+    GIVEN("transform <- shearing(0, 0, 0, 0, 1, 0), p <- point(2, 3, 4)") {
+        const Matrix transform = shearing(0, 0, 0, 0, 1, 0);
+        const Point p = point(2, 3, 4);
+
+        THEN("transform * p = point(2, 3, 6") {
+            REQUIRE(transform * p == point(2, 3, 6));
+        }
+    }
+}
+
+SCENARIO("A shearing transformation moves z in proportion to y") {
+    GIVEN("transform <- shearing(0, 0, 0, 0, 0, 1), p <- point(2, 3, 4)") {
+        const Matrix transform = shearing(0, 0, 0, 0, 0, 1);
+        const Point p = point(2, 3, 4);
+
+        THEN("transform * p = point(2, 3, 7") {
+            REQUIRE(transform * p == point(2, 3, 7));
+        }
+    }
+}

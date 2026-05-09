@@ -55,4 +55,16 @@ namespace rtc::transformations {
         return result;
     }
 
+    Matrix shearing(const float xy, const float xz, const float yx, const float yz, const float zx, const float zy) {
+        Matrix result = Matrix::identity();
+        result[0, 1] = xy;
+        result[0, 2] = xz;
+        result[1, 0] = yx;
+        result[1, 2] = yz;
+        result[2, 0] = zx;
+        result[2, 1] = zy;
+        return result;
+    }
+
+
 }
