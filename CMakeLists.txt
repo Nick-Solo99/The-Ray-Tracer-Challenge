@@ -13,6 +13,10 @@ add_library(rtc_core
         src/matrices/Matrix.h
         src/transformations/Transformations.cpp
         src/transformations/Transformations.h
+        src/rays/Ray.cpp
+        src/rays/Ray.h
+        src/spheres/Sphere.cpp
+        src/spheres/Sphere.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -23,6 +27,8 @@ add_executable(tests
         tests/canvas_tests.cpp
         tests/matrices_tests.cpp
         tests/transformations_tests.cpp
+        tests/rays_tests.cpp
+        tests/spheres_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core
