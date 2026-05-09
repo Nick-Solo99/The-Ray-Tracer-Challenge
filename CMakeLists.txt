@@ -51,3 +51,5 @@ add_executable(RTC main.cpp)
 target_link_libraries(RTC
     PRIVATE rtc_core
 )
+add_executable(ClockPixels exercises/ClockPixels.cpp)
+target_link_libraries(ClockPixels PRIVATE rtc_core)

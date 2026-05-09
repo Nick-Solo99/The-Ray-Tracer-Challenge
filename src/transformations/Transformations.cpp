@@ -66,5 +66,33 @@ namespace rtc::transformations {
         return result;
     }
 
+    Transform& Transform::translate(const float x, const float y, const float z) {
+        m = translation(x, y, z) * m;
+        return *this;
+    }
 
+    Transform& Transform::scale(const float x, const float y, const float z) {
+        m = scaling(x, y, z) * m;
+        return *this;
+    }
+
+    Transform& Transform::rotate_x(const float radians) {
+        m = rotation_x(radians) * m;
+        return *this;
+    }
+
+    Transform& Transform::rotate_y(const float radians) {
+        m = rotation_y(radians) * m;
+        return *this;
+    }
+
+    Transform& Transform::rotate_z(const float radians) {
+        m = rotation_z(radians) * m;
+        return *this;
+    }
+
+    Transform& Transform::shearing(const float xy, const float xz, const float yx, const float yz, const float zx, const float zy) {
+        m = transformations::shearing(xy, xz, yx, yz, zx, zy) * m;
+        return *this;
+    }
 }

@@ -214,3 +214,56 @@ SCENARIO("A shearing transformation moves z in proportion to y") {
         }
     }
 }
+
+SCENARIO("Individual transformations are applied in sequence") {
+    GIVEN("p <- point(1, 0, 1), A <- rotation_x(PI/2), B <- scaling(5, 5, 5), C <- translation(10, 5, 7)") {
+        const Point p = point(1, 0, 1);
+        const Matrix A = rotation_x(PI / 2);
+        const Matrix B = scaling(5, 5, 5);
+        const Matrix C = translation(10, 5, 7);
+
+        WHEN("p2 <- A * p)") {
+            const Point p2 = A * p;
+            THEN("p2 = point(1, -1, 0)") {
+                REQUIRE(p2 == point(1, -1, 0));
+            }
+            WHEN("p3 <- B * p2)") {
+                const Point p3 = B * p2;
+                THEN("p3 = point(5, -5, 0)") {
+                    REQUIRE(p3 == point(5, -5, 0));
+                }
+                WHEN("p4 <- C * p3)") {
+                    const Point p4 = C * p3;
+                    THEN("p4 = point(15, 0, 7)") {
+                        REQUIRE(p4 == point(15, 0, 7));
+                    }
+                }
+            }
+        }
+    }
+}
+
+SCENARIO("Chained transformations must be applied in reverse order") {
+    GIVEN("p <- point(1, 0, 1), A <- rotation_x(PI/2), B <- scaling(5, 5, 5), C <- translation(10, 5, 7)") {
+        const Point p = point(1, 0, 1);
+        const Matrix A = rotation_x(PI / 2);
+        const Matrix B = scaling(5, 5, 5);
+        const Matrix C = translation(10, 5, 7);
+        WHEN("T <- C * B * A") {
+            const Matrix T = C * B * A;
+            THEN("T * p = point(15, 0, 7)") {
+                REQUIRE(T * p == point(15, 0, 7));
+            }
+        }
+    }
+}
+
+SCENARIO("Chained transformations using fluent API") {
+    GIVEN("p <- point(1, 0, 1), T <- Transform().rotate_x(PI/2).scale(5, 5, 5).translate(10, 5, 7)") {
+        const Point p = point(1, 0, 1);
+        const Matrix T = Transform().rotate_x(PI/2).scale(5, 5, 5).translate(10, 5, 7);
+        THEN("T * p = point(15, 0, 7)") {
+            REQUIRE(T * p == point(15, 0, 7));
+        }
+    }
+}
