@@ -15,8 +15,12 @@ add_library(rtc_core
         src/transformations/Transformations.h
         src/rays/Ray.cpp
         src/rays/Ray.h
-        src/spheres/Sphere.cpp
-        src/spheres/Sphere.h
+        src/shapes/spheres/Sphere.cpp
+        src/shapes/spheres/Sphere.h
+        src/intersections/Intersection.cpp
+        src/intersections/Intersection.h
+        src/shapes/Shape.cpp
+        src/shapes/Shape.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -29,6 +33,7 @@ add_executable(tests
         tests/transformations_tests.cpp
         tests/rays_tests.cpp
         tests/spheres_tests.cpp
+        tests/intersections_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core

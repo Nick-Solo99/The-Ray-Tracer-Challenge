@@ -14,7 +14,7 @@ namespace rtc::rays {
         Tuple origin, direction;
 
         Ray(const Point origin, const Vector direction) : origin(origin), direction(direction) {}
-        Point position(const float& t) const { return origin + direction * t; }
+        [[nodiscard]] Point position(const float& t) const { return origin + direction * t; }
     };
 
 
