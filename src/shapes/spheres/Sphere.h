@@ -5,11 +5,15 @@
 #ifndef RTC_SPHERE_H
 #define RTC_SPHERE_H
 #include <shapes/Shape.h>
+#include <matrices/Matrix.h>
 
 namespace rtc::shapes::spheres {
     class Sphere final : public Shape {
         public:
+        matrices::Matrix transform = matrices::Matrix::identity();
         [[nodiscard]] std::vector<Intersection> intersect(const Ray& ray) const override;
+
+        void set_transform(const matrices::Matrix& t) { transform = t; }
     };
 
 

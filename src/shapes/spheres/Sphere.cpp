@@ -12,10 +12,12 @@ namespace rtc::shapes::spheres {
     using namespace rtc::tuples;
 
     std::vector<intersections::Intersection> Sphere::intersect(const Ray& ray) const {
-        const Vector sphere_to_ray = ray.origin - point(0, 0, 0);
+        const Ray ray2 = ray.transform(transform.inverse());
 
-        const float a = dot(ray.direction, ray.direction);
-        const float b = 2.0f * dot(ray.direction, sphere_to_ray);
+        const Vector sphere_to_ray = ray2.origin - point(0, 0, 0);
+
+        const float a = dot(ray2.direction, ray2.direction);
+        const float b = 2.0f * dot(ray2.direction, sphere_to_ray);
         const float c = dot(sphere_to_ray, sphere_to_ray) - 1.0f;
 
         const float discriminant = b * b - 4.0f * a * c;
