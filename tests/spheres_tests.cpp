@@ -8,6 +8,7 @@
 #include <intersections/Intersection.h>
 #include <matrices/Matrix.h>
 #include <transformations/Transformations.h>
+#include <numbers>
 
 using namespace rtc::rays;
 using namespace rtc::shapes::spheres;
@@ -265,6 +266,36 @@ SCENARIO("The normal is a normalized vector") {
 
             THEN("n = normalize(n)") {
                 REQUIRE(n == normalize(n));
+            }
+        }
+    }
+}
+
+SCENARIO("Computing the normal on a translated sphere") {
+    GIVEN("s <- sphere(), s.set_transform(translation(0, 1, 0))") {
+        Sphere s{};
+        s.set_transform(translation(0, 1, 0));
+
+        WHEN("n <- s.normal_at(point(0, 1.70711, -0.70711))") {
+            const Vector n = s.normal_at(point(0, 1.70711, -0.70711));
+            THEN("n = vector(0, 0.70711, -0.70711))") {
+                REQUIRE(n == vector(0, 0.70711, -0.70711));
+            }
+        }
+    }
+}
+
+SCENARIO("Computing the normal on a transformed sphere") {
+    GIVEN("s <- sphere(), m <- scaling(1, 0.5, 1) * rotation_z(PI / 5), s.set_transform(m)") {
+        Sphere s{};
+        const Matrix m = scaling(1, 0.5, 1) * rotation_z(std::numbers::pi_v<float> / 5.0f);
+        s.set_transform(m);
+
+        WHEN("n <- s.normal_at(point(0, sqrt(2)/2, -sqrt(2)/2))") {
+            const Vector n = s.normal_at(point(0, std::sqrtf(2.0f)/2.0f, -std::sqrtf(2.0f)/2.0f));
+
+            THEN("n = vector(0, 0.97014, -0.24254") {
+                REQUIRE(n == vector(0, 0.97014, -0.24254));
             }
         }
     }
