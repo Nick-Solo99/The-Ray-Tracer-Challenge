@@ -31,4 +31,8 @@ namespace rtc::shapes::spheres {
 
         return intersections::intersections({{t1, this},{t2, this}});
     }
+
+    Vector Sphere::normal_at(const Point& p) const {
+        return normalize(p - point(0, 0, 0));
+    }
 }

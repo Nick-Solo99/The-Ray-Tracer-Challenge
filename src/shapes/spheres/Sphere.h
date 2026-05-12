@@ -12,7 +12,7 @@ namespace rtc::shapes::spheres {
         public:
         matrices::Matrix transform = matrices::Matrix::identity();
         [[nodiscard]] std::vector<Intersection> intersect(const Ray& ray) const override;
-
+        [[nodiscard]] tuples::Vector normal_at(const tuples::Point& p) const override;
         void set_transform(const matrices::Matrix& t) { transform = t; }
     };
 

@@ -21,34 +21,29 @@ using namespace rtc::transformations;
 
 int main() {
     constexpr int CANVAS_SIZE = 256;
-
-    constexpr int CAM_DISTANCE = 5;
-
-    Canvas canvas{CANVAS_SIZE, CANVAS_SIZE};
-
+    constexpr float CAM_DISTANCE = 10.0f;
     const Point ray_origin = point(0, 0, -CAM_DISTANCE);
-    constexpr float WALL_Z{10.0f};
-    constexpr float WALL_SIZE{(WALL_Z / CAM_DISTANCE + 1.0f) * 2.0f + 1.0f};
+    constexpr float WALL_Z = 15.0f;
+    constexpr float WALL_SIZE = (WALL_Z / CAM_DISTANCE + 1) * 2 + 1;
     constexpr float PIXEL_SIZE = WALL_SIZE / CANVAS_SIZE;
-    constexpr float HALF = WALL_SIZE / 2.0f;
+    constexpr float HALF = WALL_SIZE / 2;
 
+    Canvas canvas(CANVAS_SIZE, CANVAS_SIZE);
     Sphere s{};
 
     //s.set_transform(scaling(1, 0.5, 1));
     //s.set_transform(scaling(0.5, 1, 1));
-    //s.set_transform( rotation_z(std::numbers::pi_v<float> / 4) * scaling(0.5, 1, 1));
-    //s.set_transform( shearing(1, 0, 0, 0, 0, 0) * scaling(0.5, 1, 1));
-
-
+    //s.set_transform(rotation_z(std::numbers::pi_z<float> / 4) * scaling(0.5, 1, 1));
+    //s.set_transform(shearing(1, 0, 0, 0, 0, 0) * scaling(0.5, 1, 1));
 
     for (size_t y{}; y < CANVAS_SIZE; ++y) {
-        const float world_y = HALF - PIXEL_SIZE * y;
+        const float world_y = HALF - y * PIXEL_SIZE;
         for (size_t x{}; x < CANVAS_SIZE; ++x) {
-            const float world_x = -HALF + PIXEL_SIZE * x;
+            const float world_x = -HALF + x * PIXEL_SIZE;
             const Point position = point(world_x, world_y, WALL_Z);
-            const Ray r(ray_origin, normalize(position - ray_origin));
+            const Ray r{ray_origin, normalize(position - ray_origin)};
             const auto& xs = s.intersect(r);
-            if (hit(xs) != std::nullopt) {
+            if (const auto& h = hit(xs)) {
                 canvas.write_pixel(x, y, color(0.5f, 0.0, 0.5f));
             }
         }
@@ -57,8 +52,8 @@ int main() {
     std::ofstream file("../output/first_shadow.ppm");
 
     file << canvas.canvas_to_ppm();
-    std::cout << "File created." << std::endl;
 
+    std::cout << "File created." << std::endl;
 
     return 0;
 }

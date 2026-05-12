@@ -11,6 +11,12 @@ namespace rtc::rays {
     struct Ray;
 }
 
+namespace rtc::tuples {
+    struct Tuple;
+    using Vector = Tuple;
+    using Point = Tuple;
+}
+
 namespace rtc::shapes {
     using Intersection = intersections::Intersection;
     using Ray = rays::Ray;
@@ -19,6 +25,7 @@ namespace rtc::shapes {
         public:
         virtual ~Shape() = default;
         [[nodiscard]] virtual std::vector<Intersection> intersect(const Ray& ray) const = 0;
+        [[nodiscard]] virtual tuples::Vector normal_at(const tuples::Point& p) const = 0;
     };
 }
 

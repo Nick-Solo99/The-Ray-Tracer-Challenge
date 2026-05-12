@@ -204,3 +204,68 @@ SCENARIO("Intersecting a translated sphere with a ray") {
         }
     }
 }
+
+SCENARIO("The normal on a sphere at a point on the x axis") {
+    GIVEN("s <- sphere()") {
+        const Sphere s{};
+
+        WHEN("n <- s.normal_at(point(1, 0, 0))") {
+            const Vector n = s.normal_at(point(1, 0, 0));
+
+            THEN("n = vector(1, 0, 0)") {
+                REQUIRE(n == vector(1, 0, 0));
+            }
+        }
+    }
+}
+
+SCENARIO("The normal on a sphere at a point on the y axis") {
+    GIVEN("s <- sphere()") {
+        const Sphere s{};
+
+        WHEN("n <- s.normal_at(point(0, 1, 0))") {
+            const Vector n = s.normal_at(point(0, 1, 0));
+            THEN("n = vector(0, 1, 0)") {
+                REQUIRE(n == vector(0, 1, 0));
+            }
+        }
+    }
+}
+
+SCENARIO("The normal on a sphere at a point on the z axis") {
+    GIVEN("s <- sphere()") {
+        const Sphere s{};
+        WHEN("n <- s.normal_at(point(0, 0, 1))") {
+            const Vector n = s.normal_at(point(0, 0, 1));
+            THEN("n = vector(0, 0, 1)") {
+                REQUIRE(n == vector(0, 0, 1));
+            }
+        }
+    }
+}
+
+SCENARIO("The normal on a sphere at a nonaxial point") {
+    GIVEN("s <- sphere()") {
+        const Sphere s{};
+        WHEN("n <- s.normal_at(point(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3))") {
+            const Vector n = s.normal_at(point(std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f));
+
+            THEN("n = vector(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3)") {
+                REQUIRE(n == vector(std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f));
+            }
+        }
+    }
+}
+
+SCENARIO("The normal is a normalized vector") {
+    GIVEN("s <- sphere()") {
+        const Sphere s{};
+        WHEN("n <- s.normal_at(point(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3))") {
+            const Vector n = s.normal_at(point(std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f));
+
+            THEN("n = normalize(n)") {
+                REQUIRE(n == normalize(n));
+            }
+        }
+    }
+}
