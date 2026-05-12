@@ -6,7 +6,7 @@
 #define RTC_SHAPE_H
 #include <vector>
 #include <intersections/Intersection.h>
-
+#include <materials/Material.h>
 namespace rtc::rays {
     struct Ray;
 }
@@ -20,9 +20,11 @@ namespace rtc::tuples {
 namespace rtc::shapes {
     using Intersection = intersections::Intersection;
     using Ray = rays::Ray;
+    using Material = materials::Material;
 
     class Shape {
         public:
+        Material material;
         virtual ~Shape() = default;
         [[nodiscard]] virtual std::vector<Intersection> intersect(const Ray& ray) const = 0;
         [[nodiscard]] virtual tuples::Vector normal_at(const tuples::Point& p) const = 0;

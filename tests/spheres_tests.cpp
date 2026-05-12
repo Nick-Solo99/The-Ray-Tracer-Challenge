@@ -15,6 +15,7 @@ using namespace rtc::shapes::spheres;
 using namespace rtc::intersections;
 using namespace rtc::matrices;
 using namespace rtc::transformations;
+using namespace rtc::materials;
 
 SCENARIO("A ray intersects a sphere at two points") {
     GIVEN("r <- ray(point(0, 0, -5), vector(0, 0, 1)), s <- sphere()") {
@@ -296,6 +297,38 @@ SCENARIO("Computing the normal on a transformed sphere") {
 
             THEN("n = vector(0, 0.97014, -0.24254") {
                 REQUIRE(n == vector(0, 0.97014, -0.24254));
+            }
+        }
+    }
+}
+
+SCENARIO("A sphere has a default material") {
+    GIVEN("s <- sphere()") {
+        const Sphere s{};
+        WHEN("m <- s.material") {
+            const Material m = s.material;
+
+            THEN("m = Material") {
+                REQUIRE(m == Material{});
+            }
+        }
+    }
+}
+
+SCENARIO("A sphere may be assigned a material") {
+    GIVEN("s <- sphere(), m <- material(), m.ambient = 1") {
+        Sphere s{};
+        Material m{ .ambient = 1 };
+
+        WHEN("s.material <- m") {
+            s.material = m;
+
+            THEN("s.material = m") {
+                REQUIRE(s.material == m);
+            }
+
+            AND_THEN("s.material.ambient = 1") {
+                REQUIRE(s.material.ambient == 1);
             }
         }
     }

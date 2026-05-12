@@ -30,6 +30,8 @@ namespace rtc::tuples {
         Tuple& operator-=(const Tuple& t);
         float& operator[](size_t i);
         const float& operator[](size_t i) const;
+
+        Tuple reflect(const Tuple& n) const;
     };
     static_assert(sizeof(Tuple) == sizeof(float) * 4, "Tuple size mismatch");
 

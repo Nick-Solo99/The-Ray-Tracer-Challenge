@@ -356,3 +356,33 @@ SCENARIO("Multiplying colors") {
         }
     }
 }
+
+SCENARIO("Reflecting a vector approaching at 45 deg") {
+    GIVEN("v <- vector(1, -1, 0), n <- vector(0, 1, 0)") {
+        const Vector v = vector(1, -1, 0);
+        const Vector n = vector(0, 1, 0);
+
+        WHEN("r <- v.reflect(n)") {
+            const Vector r = v.reflect(n);
+
+            THEN("r = vector(1, 1, 0)") {
+                REQUIRE(r == vector(1, 1, 0));
+            }
+        }
+    }
+}
+
+SCENARIO("Reflecting a vector off a slanted surface") {
+    GIVEN("v <- vector(0, -1, 0), n <- vector(sqrt(2)/2, sqrt(2)/2, 0)") {
+        const Vector v = vector(0, -1, 0);
+        const Vector n = vector(std::sqrtf(2.0f)/2.0f, std::sqrtf(2.0f)/2.0f, 0.0f);
+
+        WHEN("r <- v.reflect(n)") {
+            const Vector r = v.reflect(n);
+
+            THEN("r = vector(1, 0, 0)") {
+                REQUIRE(r == vector(1, 0, 0));
+            }
+        }
+    }
+}

@@ -21,6 +21,12 @@ add_library(rtc_core
         src/intersections/Intersection.h
         src/shapes/Shape.cpp
         src/shapes/Shape.h
+        src/lights/Light.cpp
+        src/lights/Light.h
+        src/lights/point/PointLight.cpp
+        src/lights/point/PointLight.h
+        src/materials/Material.cpp
+        src/materials/Material.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -34,6 +40,8 @@ add_executable(tests
         tests/rays_tests.cpp
         tests/spheres_tests.cpp
         tests/intersections_tests.cpp
+        tests/lights_tests.cpp
+        tests/materials_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core
