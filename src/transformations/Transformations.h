@@ -9,12 +9,12 @@
 
 namespace rtc::transformations {
     using Matrix = matrices::Matrix;
-    Matrix translation(const float x, const float y, const float z);
-    Matrix scaling(const float x, const float y, const float z);
-    Matrix rotation_x(const float radians);
-    Matrix rotation_y(const float radians);
-    Matrix rotation_z(const float radians);
-    Matrix shearing(const float xy, const float xz, const float yx, const float yz, const float zx, const float zy);
+    Matrix translation(float x, float y, float z);
+    Matrix scaling(float x, float y, float z);
+    Matrix rotation_x(float radians);
+    Matrix rotation_y(float radians);
+    Matrix rotation_z(float radians);
+    Matrix shearing(float xy, float xz, float yx, float yz, float zx, float zy);
 
     class Transform {
         public:
@@ -22,12 +22,12 @@ namespace rtc::transformations {
 
         Transform() : m(Matrix::identity()) {}
 
-        Transform& translate(const float x, const float y, const float z);
-        Transform& scale(const float x, const float y, const float z);
-        Transform& rotate_x(const float radians);
-        Transform& rotate_y(const float radians);
-        Transform& rotate_z(const float radians);
-        Transform& shearing(const float xy, const float xz, const float yx, const float yz, const float zx, const float zy);
+        Transform& translate(float x, float y, float z);
+        Transform& scale(float x, float y, float z);
+        Transform& rotate_x(float radians);
+        Transform& rotate_y(float radians);
+        Transform& rotate_z(float radians);
+        Transform& shearing(float xy, float xz, float yx, float yz, float zx, float zy);
 
         operator Matrix() const { return m; };
     };

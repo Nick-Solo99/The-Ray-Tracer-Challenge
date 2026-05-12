@@ -9,7 +9,7 @@
 
 namespace rtc::tuples {
 
-    constexpr float EPSILON = 0.00001f;
+    constexpr float EPSILON = 0.0001f;
 
     bool Tuple::isPoint() const{
         return std::fabs(w - 1.0f) < EPSILON;
@@ -98,6 +98,10 @@ namespace rtc::tuples {
             default:
                 throw std::out_of_range("invalid index");
         }
+    }
+
+    Tuple Tuple::reflect(const Tuple &n) const {
+        return *this - n * 2 * dot(*this, n);
     }
 
 

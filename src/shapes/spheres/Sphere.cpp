@@ -31,4 +31,12 @@ namespace rtc::shapes::spheres {
 
         return intersections::intersections({{t1, this},{t2, this}});
     }
+
+    Vector Sphere::normal_at(const Point& p) const {
+        const Point object_point = transform.inverse() * p;
+        const Vector object_normal = normalize(object_point - point(0, 0, 0));
+        Vector world_normal =  transform.transpose().inverse() * object_normal;
+        world_normal.w = 0;
+        return normalize(world_normal);
+    }
 }
