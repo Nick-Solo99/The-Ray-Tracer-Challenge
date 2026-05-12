@@ -1,5 +1,5 @@
 //
-// Created by Nicholas Solomon on 2026-05-11.
+// Created by Nicholas Solomon on 2026-05-12.
 //
 
 #include <canvas/Canvas.h>
@@ -8,6 +8,7 @@
 #include <rays/Ray.h>
 #include <intersections/Intersection.h>
 #include <transformations/Transformations.h>
+#include <lights/point/PointLight.h>
 #include <iostream>
 #include <fstream>
 #include <numbers>
@@ -18,6 +19,7 @@ using namespace rtc::shapes::spheres;
 using namespace rtc::rays;
 using namespace rtc::intersections;
 using namespace rtc::transformations;
+using namespace rtc::lights::point;
 
 int main() {
     constexpr int CANVAS_SIZE = 256;
@@ -30,11 +32,16 @@ int main() {
 
     Canvas canvas(CANVAS_SIZE, CANVAS_SIZE);
     Sphere s{};
+    s.material.color = color(1.0f, 0.2f, 1.0f);
+
+    const Point light_pos = point(-10, 10, -10);
+    const Color light_color = color(1, 1, 1);
+    const PointLight light{light_pos, light_color};
 
     //s.set_transform(scaling(1, 0.5, 1));
     //s.set_transform(scaling(0.5, 1, 1));
     //s.set_transform(rotation_z(std::numbers::pi_v<float> / 4) * scaling(0.5, 1, 1));
-    //s.set_transform(shearing(1, 0, 0, 0, 0, 0) * scaling(0.5, 1, 1));
+    s.set_transform(shearing(1, 0, 0, 0, 0, 0) * scaling(0.5, 1, 1));
 
     for (size_t y{}; y < CANVAS_SIZE; ++y) {
         const float world_y = HALF - y * PIXEL_SIZE;
@@ -44,12 +51,16 @@ int main() {
             const Ray r{ray_origin, normalize(position - ray_origin)};
             const auto& xs = s.intersect(r);
             if (const auto& h = hit(xs)) {
-                canvas.write_pixel(x, y, color(0.5f, 0.0, 0.5f));
+                const Point hit_pos = r.position(h->t);
+                const Vector hit_norm = h->object->normal_at(hit_pos);
+                const Vector eye = -r.direction;
+                const Color pixel_color = s.material.lighting(light, position, eye, hit_norm);
+                canvas.write_pixel(x, y, pixel_color);
             }
         }
     }
 
-    std::ofstream file("../output/first_shadow.ppm");
+    std::ofstream file("../output/first_shading.ppm");
 
     file << canvas.canvas_to_ppm();
 

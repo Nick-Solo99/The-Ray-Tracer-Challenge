@@ -9,7 +9,7 @@
 
 namespace rtc::materials {
 
-    Color Material::lighting(const Light &light, const Point &pos, const Vector &eye_v, const Vector &normal_v) {
+    Color Material::lighting(const Light &light, const Point &pos, const Vector &eye_v, const Vector &normal_v) const {
         const Color effective_color = color * light.intensity;
         const Vector light_v = normalize(light.position - pos);
         const Color ambient_cont = effective_color * this->ambient ;

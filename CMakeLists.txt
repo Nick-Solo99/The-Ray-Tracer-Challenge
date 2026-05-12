@@ -74,3 +74,6 @@ add_executable(ClockPixels exercises/ClockPixels.cpp)
 target_link_libraries(ClockPixels PRIVATE rtc_core)
 add_executable(FirstShadow exercises/FirstShadow.cpp)
 target_link_libraries(FirstShadow PRIVATE rtc_core)
+
+add_executable(FirstShading exercises/FirstShading.cpp)
+target_link_libraries(FirstShading PRIVATE rtc_core)
