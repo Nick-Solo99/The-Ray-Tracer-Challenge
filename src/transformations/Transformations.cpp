@@ -95,4 +95,17 @@ namespace rtc::transformations {
         m = transformations::shearing(xy, xz, yx, yz, zx, zy) * m;
         return *this;
     }
+
+    Matrix view_transform(const Point from, const Point to, const Vector up) {
+        const Vector forward = normalize(to - from);
+        const Vector left = cross(forward, normalize(up));
+        const Vector true_up = cross(left, forward);
+        const Matrix orientation{
+            {left.x, left.y, left.z, 0},
+            {true_up.x, true_up.y, true_up.z, 0},
+            {-forward.x, -forward.y, -forward.z, 0},
+            {0, 0, 0, 1}
+        };
+        return orientation * translation(-from.x, -from.y, -from.z);
+    }
 }
