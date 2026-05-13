@@ -27,6 +27,8 @@ add_library(rtc_core
         src/lights/point/PointLight.h
         src/materials/Material.cpp
         src/materials/Material.h
+        src/world/World.cpp
+        src/world/World.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -42,6 +44,7 @@ add_executable(tests
         tests/intersections_tests.cpp
         tests/lights_tests.cpp
         tests/materials_tests.cpp
+        tests/world_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core

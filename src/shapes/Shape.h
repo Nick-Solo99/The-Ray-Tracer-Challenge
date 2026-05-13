@@ -5,8 +5,9 @@
 #ifndef RTC_SHAPE_H
 #define RTC_SHAPE_H
 #include <vector>
-#include <intersections/Intersection.h>
 #include <materials/Material.h>
+#include <matrices/Matrix.h>
+
 namespace rtc::rays {
     struct Ray;
 }
@@ -17,17 +18,26 @@ namespace rtc::tuples {
     using Point = Tuple;
 }
 
+namespace rtc::intersections {
+    struct Intersection;
+}
+
 namespace rtc::shapes {
-    using Intersection = intersections::Intersection;
     using Ray = rays::Ray;
     using Material = materials::Material;
 
     class Shape {
         public:
         Material material;
+        matrices::Matrix transform = matrices::Matrix::identity();
+
+        void set_transform(const matrices::Matrix& t) { transform = t; }
+
+        bool virtual operator==(const Shape& other) const = 0;
+
+        [[nodiscard]] virtual std::vector<intersections::Intersection> intersect(const Ray& ray) const = 0;
+        [[nodiscard]] virtual Vector normal_at(const Point& p) const = 0;
         virtual ~Shape() = default;
-        [[nodiscard]] virtual std::vector<Intersection> intersect(const Ray& ray) const = 0;
-        [[nodiscard]] virtual tuples::Vector normal_at(const tuples::Point& p) const = 0;
     };
 }
 

@@ -10,6 +10,11 @@
 namespace rtc::lights::point {
     struct PointLight final : Light {
 
+        bool operator==(const Light& other) const override;
+
+        PointLight() = default;
+
+        PointLight(const Tuple pos, const Tuple inten) { position = pos; intensity = inten; }
     };
 }
 

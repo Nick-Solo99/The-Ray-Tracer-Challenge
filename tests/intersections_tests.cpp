@@ -6,9 +6,11 @@
 
 #include "intersections/Intersection.h"
 #include "shapes/spheres/Sphere.h"
+#include <rays/Ray.h>
 
 using namespace rtc::shapes::spheres;
 using namespace rtc::intersections;
+using namespace rtc::rays;
 
 SCENARIO("An intersection encapsulates t and object") {
     GIVEN("s <- sphere()") {
@@ -114,6 +116,81 @@ SCENARIO("The hit is always the lowest nonnegative intersection") {
 
             THEN("i = i4") {
                 REQUIRE(i == i4);
+            }
+        }
+    }
+}
+
+SCENARIO("Precomputing the state of an intersection") {
+    GIVEN("r <- ray(point(0, 0, -5), vector(0, 0, 1)), shape <- sphere(), i <- intersection(4, shape)") {
+        const Ray r{point(0, 0, -5), vector(0, 0, 1)};
+        const Sphere shape{};
+        const Intersection i{4, &shape};
+
+        WHEN("comps <- i.pre_compute(r)") {
+            const Components comps = i.pre_compute(r);
+
+            THEN("comps.t = i.t") {
+                REQUIRE(comps.t == i.t);
+            }
+
+            AND_THEN("comps.object = i.object") {
+                REQUIRE(comps.object == i.object);
+            }
+
+            AND_THEN("comps.point = point(0, 0, -1)") {
+                REQUIRE(comps.point == point(0, 0, -1));
+            }
+
+            AND_THEN("comps.eve_v = vector(0, 0, -1)") {
+                REQUIRE(comps.eye_v == vector(0, 0, -1));
+            }
+
+            AND_THEN("comps.normal_v = vector(0, 0, -1)") {
+                REQUIRE(comps.normal_v == vector(0, 0, -1));
+            }
+        }
+
+    }
+}
+
+SCENARIO("The hit, when an intersection occurs on the outside") {
+    GIVEN("r <- ray(point(0, 0, -5), vector(0, 0, 1)), shape <- sphere(), i <- intersection(4, shape)") {
+        const Ray r{point(0, 0, -5), vector(0, 0, 1)};
+        const Sphere shape{};
+        const Intersection i{4, &shape};
+
+        WHEN("comps <- i.pre_compute(r)") {
+            const Components comps = i.pre_compute(r);
+            THEN("comps.inside = false") {
+                REQUIRE(!comps.inside);
+            }
+        }
+    }
+}
+
+SCENARIO("The hit, when an intersection occurs on the inside") {
+    GIVEN("r <- ray(point(0, 0, -5), vector(0, 0, 1)), shape <- sphere(), i <- intersection(4, shape)") {
+        const Ray r{point(0, 0, 0), vector(0, 0, 1)};
+        const Sphere shape{};
+        const Intersection i{1, &shape};
+
+        WHEN("comps <- i.pre_compute(r)") {
+            const Components comps = i.pre_compute(r);
+            THEN("comps.inside = true") {
+                REQUIRE(comps.inside);
+            }
+
+            THEN("comps.point = point(0, 0, 1)") {
+                REQUIRE(comps.point == point(0, 0, 1));
+            }
+
+            AND_THEN("comps.eye_v = vector(0, 0, -1)") {
+                REQUIRE(comps.eye_v == vector(0, 0, -1));
+            }
+
+            AND_THEN("comps.normal_v = vector(0, 0, -1)") {
+                REQUIRE(comps.normal_v == vector(0, 0, -1));
             }
         }
     }
