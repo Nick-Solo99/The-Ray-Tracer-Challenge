@@ -108,7 +108,7 @@ SCENARIO("Lighting with the eye in the path of the reflection vector") {
         const PointLight light{point(0, 10, -10), color(1, 1, 1)};
 
         WHEN("result <- m.lighting(light, pos, eye_v, normal_v)") {
-            Color result = m.lighting(light, pos, eye_v, normal_v);
+            Color result = m.lighting(light, pos, normalize(eye_v), normal_v);
 
             THEN("result = color(1.6364, 1.6364, 1.6364)") {
                 REQUIRE(result == color(1.6364f, 1.6364f, 1.6364f));

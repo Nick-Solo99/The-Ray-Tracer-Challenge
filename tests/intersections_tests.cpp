@@ -7,10 +7,14 @@
 #include "intersections/Intersection.h"
 #include "shapes/spheres/Sphere.h"
 #include <rays/Ray.h>
-
+#include <transformations/Transformations.h>
 using namespace rtc::shapes::spheres;
 using namespace rtc::intersections;
 using namespace rtc::rays;
+using namespace rtc::transformations;
+
+
+constexpr float EPSILON = 0.005f;
 
 SCENARIO("An intersection encapsulates t and object") {
     GIVEN("s <- sphere()") {
@@ -191,6 +195,25 @@ SCENARIO("The hit, when an intersection occurs on the inside") {
 
             AND_THEN("comps.normal_v = vector(0, 0, -1)") {
                 REQUIRE(comps.normal_v == vector(0, 0, -1));
+            }
+        }
+    }
+}
+
+SCENARIO("The hit should offset the point") {
+    GIVEN("r <- ray(point(0, 0, -5), vector(0, 0, 1)), shape <- sphere(),"
+          "s.transform <- translation(0, 0, 1), i <- intersection(5, s)") {
+        const Ray r{point(0, 0, -5), vector(0, 0, 1)};
+        Sphere shape{};
+        shape.transform = translation(0, 0, 1);
+        const Intersection i(5, &shape);
+        WHEN("comps <- i.pre_compute(r)") {
+            const Components comps = i.pre_compute(r);
+            THEN("comps.over_point.z < -EPSILON/2") {
+                REQUIRE(comps.over_point.z < -EPSILON / 2.f);
+            }
+            AND_THEN("comps.point.z > comps.over_point.z") {
+                REQUIRE(comps.point.z > comps.over_point.z);
             }
         }
     }

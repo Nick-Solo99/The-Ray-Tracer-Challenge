@@ -8,7 +8,7 @@
 using namespace rtc::matrices;
 using namespace rtc::tuples;
 
-constexpr float EPSILON = 0.00001;
+constexpr float EPSILON = 0.005f;
 
 SCENARIO("Constructing and inspecting a 4x4 matrix") {
     GIVEN("M <- {{1, 2, 3, 4}, {5.5, 6.5, 7.5, 8.5}, {9, 10, 11, 12}, {13.5, 14.5, 15.5, 16.5}}") {

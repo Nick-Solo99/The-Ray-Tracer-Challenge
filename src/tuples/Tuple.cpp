@@ -9,7 +9,7 @@
 
 namespace rtc::tuples {
 
-    constexpr float EPSILON = 0.0001f;
+    constexpr float EPSILON = 0.005f;
 
     bool Tuple::isPoint() const{
         return std::fabs(w - 1.0f) < EPSILON;

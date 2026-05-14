@@ -7,7 +7,7 @@
 #include <algorithm>
 
 namespace rtc::intersections {
-    constexpr float EPSILON = 0.00001f;
+    constexpr float EPSILON = 0.005f;
 
     Components Intersection::pre_compute(const rays::Ray &ray) const {
         Components comps;

@@ -44,10 +44,10 @@ namespace rtc::world {
 
     Color World::shade_hit(const intersections::Components &comps) const {
         Color result = color(0, 0, 0);
-        const bool& shadowed = is_shadowed(comps.over_point);
 
         for (const auto& light : lights) {
-            result += comps.object->material.lighting(*light, comps.point, comps.eye_v, comps.normal_v, shadowed);
+            const bool shadowed = is_shadowed(comps.over_point);
+            result += comps.object->material.lighting(*light, comps.over_point, comps.eye_v, comps.normal_v, shadowed);
         }
 
         return result;

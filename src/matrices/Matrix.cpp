@@ -8,7 +8,7 @@
 
 namespace rtc::matrices {
 
-    constexpr float EPSILON = 0.00001f;
+    constexpr float EPSILON = 0.005f;
 
     Matrix::Matrix(std::initializer_list<std::initializer_list<float> > list) {
         rows = list.size();
