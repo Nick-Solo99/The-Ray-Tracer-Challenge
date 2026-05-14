@@ -9,7 +9,7 @@
 
 namespace rtc::materials {
 
-    Color Material::lighting(const Light &light, const Point &pos, const Vector &eye_v, const Vector &normal_v) const {
+    Color Material::lighting(const Light &light, const Point &pos, const Vector &eye_v, const Vector &normal_v, const bool& in_shadow) const {
         const Color effective_color = color * light.intensity;
         const Vector light_v = normalize(light.position - pos);
         const Color ambient_cont = effective_color * this->ambient ;
@@ -35,7 +35,7 @@ namespace rtc::materials {
             }
         }
 
-        return ambient_cont + diffuse_cont + specular_cont;
+        return in_shadow ? ambient_cont : diffuse_cont + specular_cont + ambient_cont ;
     }
 
 

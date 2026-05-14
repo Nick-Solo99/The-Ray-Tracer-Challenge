@@ -136,3 +136,24 @@ SCENARIO("Lighting with the light behind the surface") {
         }
     }
 }
+
+SCENARIO("Lighting with the surface in shadow") {
+    GIVEN("m <- material(), pos <- point(0, 0, 0), "
+          "eye_v <- vector(0, 0, -1), "
+          "normal_v <- vector(0, 0, -1), "
+          "light <- PointLight(point(0, 0, -10), color(1, 1, 1)),"
+          "in_shadow <- true") {
+        Material m;
+        const Point pos = point(0, 0, 0);
+        const Vector eye_v = vector(0, 0, -1);
+        const Vector normal_v = vector(0, 0, -1);
+        const PointLight light{point(0, 0, -10), color(1, 1, 1)};
+
+        WHEN("result <- m.lighting(light, pos, eye_v, normal_v, in_shadow)") {
+            const Color result = m.lighting(light, pos, eye_v, normal_v, true);
+            THEN("result = color(0.1, 0.1, 0.1)") {
+                REQUIRE(result == color(0.1f, 0.1f, 0.1f));
+            }
+        }
+    }
+}
