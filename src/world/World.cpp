@@ -9,6 +9,7 @@
 
 using namespace rtc::lights::point;
 using namespace rtc::shapes::spheres;
+using namespace rtc::rays;
 
 namespace rtc::world {
     World World::default_world() {
@@ -57,5 +58,18 @@ namespace rtc::world {
             return shade_hit(h->pre_compute(r));
         }
         return color(0, 0, 0);
+    }
+
+    bool World::is_shadowed(const Point& p) const {
+        const Vector v = lights[0]->position - p;
+        const float distance = magnitude(v);
+        const Vector direction = normalize(v);
+
+        const Ray r{p, direction};
+        const auto xs = intersect(r);
+        if (const auto& h = hit(xs); h && h->t < distance) {
+            return true;
+        }
+        return false;
     }
 }

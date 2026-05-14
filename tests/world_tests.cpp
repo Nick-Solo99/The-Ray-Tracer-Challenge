@@ -184,3 +184,43 @@ SCENARIO("The color with an intersection behind the ray") {
         }
     }
 }
+
+SCENARIO("There is no shadow when nothing is collinear with point and light") {
+    GIVEN("w <- default_world(), p <- point(0, 10, 0)") {
+        const World w = World::default_world();
+        const Point p = point(0, 10, 0);
+        THEN("w.is_shadowed(p) is false") {
+            REQUIRE(w.is_shadowed(p) == false);
+        }
+    }
+}
+
+SCENARIO("The shadow when an object is between the point and the light") {
+    GIVEN("w <- default_world(), p <- point(10, -10, 10)") {
+        const World w = World::default_world();
+        const Point p = point(10, -10, 10);
+        THEN("w.is_shadowed(p) is true") {
+            REQUIRE(w.is_shadowed(p) == true);
+        }
+    }
+}
+
+SCENARIO("There is no shadow when an object is behind the light") {
+    GIVEN("w <- default_world(), p <- point(-20, 20, -20)") {
+        const World w = World::default_world();
+        const Point p = point(-20, 20, -20);
+        THEN("w.is_shadowed(p) is false") {
+            REQUIRE(w.is_shadowed(p) == false);
+        }
+    }
+}
+
+SCENARIO("There is no shadow when an object is behind the point") {
+    GIVEN("w <- default_world(), p <- point(-2, 2, -2)") {
+        const World w = World::default_world();
+        const Point p = point(-2, 2, -2);
+        THEN("w.is_shadowed(p) is false") {
+            REQUIRE(w.is_shadowed(p) == false);
+        }
+    }
+}
