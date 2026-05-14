@@ -83,3 +83,6 @@ target_link_libraries(FirstShadow PRIVATE rtc_core)
 
 add_executable(FirstShading exercises/FirstShading.cpp)
 target_link_libraries(FirstShading PRIVATE rtc_core)
+add_executable(FirstScene exercises/FirstScene.cpp
+        exercises/FirstScene.cpp)
+target_link_libraries(FirstScene PRIVATE rtc_core)
