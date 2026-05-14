@@ -1,15 +1,28 @@
 //
-// Created by xGrim on 2026-05-08.
+// Created by Nicholas Solomon on 2026-05-08.
 //
 
 #include "Sphere.h"
-#include <cmath>
+#include <intersections/Intersection.h>
 #include <tuples/Tuple.h>
 #include <rays/Ray.h>
+#include <typeinfo>
 
 
 namespace rtc::shapes::spheres {
     using namespace rtc::tuples;
+
+    bool Sphere::operator==(const Shape &other) const {
+        if (typeid(*this) != typeid(other)) {
+            return false;
+        }
+
+        const auto& other_sphere = dynamic_cast<const Sphere&>(other);
+
+
+
+        return true;
+    }
 
     std::vector<intersections::Intersection> Sphere::intersect(const Ray& ray) const {
         const Ray ray2 = ray.transform(transform.inverse());
@@ -22,8 +35,9 @@ namespace rtc::shapes::spheres {
 
         const float discriminant = b * b - 4.0f * a * c;
 
+
         if (discriminant < 0) {
-            return std::vector<Intersection>{};
+            return std::vector<intersections::Intersection>{};
         }
 
         const float t1 = (-b - std::sqrtf(discriminant)) / (2.0f * a);

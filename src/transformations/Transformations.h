@@ -1,11 +1,13 @@
 //
-// Created by xGrim on 2026-05-08.
+// Created by Nicholas Solomon on 2026-05-08.
 //
 
 #ifndef RTC_TRANSFORMATIONS_H
 #define RTC_TRANSFORMATIONS_H
 #include "matrices/Matrix.h"
+#include "tuples/Tuple.h"
 
+using namespace rtc::tuples;
 
 namespace rtc::transformations {
     using Matrix = matrices::Matrix;
@@ -31,6 +33,8 @@ namespace rtc::transformations {
 
         operator Matrix() const { return m; };
     };
+
+    Matrix view_transform(Point from, Point to, Vector up);
 }
 
 #endif //RTC_TRANSFORMATIONS_H

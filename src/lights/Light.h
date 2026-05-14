@@ -13,6 +13,10 @@ namespace rtc::lights {
     struct Light {
         Point position = point(0, 0, 0);
         Color intensity = color(1, 1, 1);
+
+        bool virtual operator==(const Light& other) const = 0;
+
+        virtual ~Light() = default;
     };
 }
 

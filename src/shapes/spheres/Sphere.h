@@ -1,5 +1,5 @@
 //
-// Created by xGrim on 2026-05-08.
+// Created by Nicholas Solomon on 2026-05-08.
 //
 
 #ifndef RTC_SPHERE_H
@@ -10,10 +10,11 @@
 namespace rtc::shapes::spheres {
     class Sphere final : public Shape {
         public:
-        matrices::Matrix transform = matrices::Matrix::identity();
-        [[nodiscard]] std::vector<Intersection> intersect(const Ray& ray) const override;
+
+        bool operator==(const Shape& other) const override;
+
+        [[nodiscard]] std::vector<intersections::Intersection> intersect(const Ray& ray) const override;
         [[nodiscard]] tuples::Vector normal_at(const tuples::Point& p) const override;
-        void set_transform(const matrices::Matrix& t) { transform = t; }
     };
 
 

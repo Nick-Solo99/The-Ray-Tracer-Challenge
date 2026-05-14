@@ -267,3 +267,68 @@ SCENARIO("Chained transformations using fluent API") {
         }
     }
 }
+
+SCENARIO("The transformation matrix for the default orientation") {
+    GIVEN("from <- point(0, 0, 0), to <- point(0, 0, -1), up <- vector(0, 1, 0)") {
+        const Point from = point(0, 0, 0);
+        const Point to = point(0, 0, -1);
+        const Vector up = vector(0, 1, 0);
+        WHEN("t <- view_transform(from, to, up)") {
+            Matrix t = view_transform(from, to, up);
+            THEN("t = identity_matrix") {
+                REQUIRE(t == Matrix::identity());
+            }
+        }
+    }
+}
+
+SCENARIO("A view transformation matrix looking in positive z direction") {
+    GIVEN("from <- point(0, 0, 0), to <- point(0, 0, 1), up <- vector(0, 1, 0)") {
+        const Point from = point(0, 0, 0);
+        const Point to = point(0, 0, 1);
+        const Vector up = vector(0, 1, 0);
+        WHEN("t <- view_transform(from, to, up)") {
+            Matrix t = view_transform(from, to, up);
+            THEN("t = scaling(-1, 1, -1)") {
+                REQUIRE(t == scaling(-1, 1, -1));
+            }
+        }
+    }
+}
+
+SCENARIO("The view transformation moves the world") {
+    GIVEN("from <- point(0, 0, 8), to <- point(0, 0, 0), up <- vector(0, 1, 0)") {
+        const Point from = point(0, 0, 8);
+        const Point to = point(0, 0, 0);
+        const Vector up = vector(0, 1, 0);
+        WHEN("t <- view_transform(from, to, up)") {
+            Matrix t = view_transform(from, to, up);
+            THEN("t = translation(0, 0, -8)") {
+                REQUIRE(t == translation(0, 0, -8));
+            }
+        }
+    }
+}
+
+SCENARIO("An arbitrary view transform") {
+    GIVEN("from <- point(1, 3, 2), to <- point(4, -2, 8), up <- vector(1, 1, 0)") {
+        const Point from = point(1, 3, 2);
+        const Point to = point(4, -2, 8);
+        const Vector up = vector(1, 1, 0);
+        WHEN("t <- view_transform(from, to, up)") {
+            Matrix t = view_transform(from, to, up);
+            THEN("t = {"
+                 "{-0.50709, 0.50709, 0.67612, -2.36643},"
+                 "{0.76772, 0.60609, 0.12122, -2.82843},"
+                 "{-0.35857, 0.59761, -0.71714, 0.00000},"
+                 "{0.00000, 0.00000, 0.00000, 1.00000}}") {
+                REQUIRE(t == Matrix{
+                    {-0.50709, 0.50709, 0.67612, -2.36643},
+                    {0.76772, 0.60609, 0.12122, -2.82843},
+                    {-0.35857, 0.59761, -0.71714, 0.00000},
+                    {0.00000, 0.00000, 0.00000, 1.00000}
+                });
+            }
+        }
+    }
+}
