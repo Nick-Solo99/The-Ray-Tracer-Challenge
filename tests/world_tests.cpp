@@ -20,6 +20,8 @@ using namespace rtc::rays;
 using namespace rtc::shapes;
 using namespace rtc::intersections;
 
+
+
 SCENARIO("Creating a world") {
     GIVEN("w <- world()") {
         const World w{};
@@ -136,6 +138,33 @@ SCENARIO("Shading an intersection from the inside") {
     }
 }
 
+SCENARIO("shade_hit() is given an intersection in shadow") {
+    GIVEN("w <- world(), w.lights[0] <- PointLight(point(0, 0, -10), color(1, 1, 1)),"
+          "s1 <- sphere(), s1 added to w,"
+          "s2 <- sphere(), s2.transform <- translation(0, 0, 10), s2 added to w,"
+          "r <- ray(point(0, 0, 5), vector(0, 0, 1)), i <- intersection(4, s2),") {
+        World w{};
+        w.lights.push_back(std::make_unique<PointLight>(point(0, 0, -10), color(1, 1, 1)));
+        w.objects.push_back(std::make_unique<Sphere>());
+        w.objects.push_back(std::make_unique<Sphere>());
+
+        const auto s1 = w.objects[0].get();
+        const auto s2 = w.objects[1].get();
+
+        s2->transform = translation(0, 0, 10);
+
+        const Ray r{point(0, 0, 5), vector(0, 0, 1)};
+        const Intersection i(4, s2);
+        WHEN("comps <- i.pre_compute(r), c <- shade_hit(comps)") {
+            const Components comps = i.pre_compute(r);
+            const Color c = w.shade_hit(comps);
+            THEN("c = color(0.1, 0.1, 0.1)") {
+                REQUIRE(c == color(0.1, 0.1, 0.1));
+            }
+        }
+    }
+}
+
 SCENARIO("The color when a ray misses") {
     GIVEN("w <- default_world(), r <- ray(point(0, 0, -5), vector(0, 1, 0)") {
         const World w = World::default_world();
@@ -181,6 +210,46 @@ SCENARIO("The color with an intersection behind the ray") {
             THEN("c = inner->material.color") {
                 REQUIRE(c == inner->material.color);
             }
+        }
+    }
+}
+
+SCENARIO("There is no shadow when nothing is collinear with point and light") {
+    GIVEN("w <- default_world(), p <- point(0, 10, 0)") {
+        const World w = World::default_world();
+        const Point p = point(0, 10, 0);
+        THEN("w.is_shadowed(p) is false") {
+            REQUIRE(w.is_shadowed(p) == false);
+        }
+    }
+}
+
+SCENARIO("The shadow when an object is between the point and the light") {
+    GIVEN("w <- default_world(), p <- point(10, -10, 10)") {
+        const World w = World::default_world();
+        const Point p = point(10, -10, 10);
+        THEN("w.is_shadowed(p) is true") {
+            REQUIRE(w.is_shadowed(p) == true);
+        }
+    }
+}
+
+SCENARIO("There is no shadow when an object is behind the light") {
+    GIVEN("w <- default_world(), p <- point(-20, 20, -20)") {
+        const World w = World::default_world();
+        const Point p = point(-20, 20, -20);
+        THEN("w.is_shadowed(p) is false") {
+            REQUIRE(w.is_shadowed(p) == false);
+        }
+    }
+}
+
+SCENARIO("There is no shadow when an object is behind the point") {
+    GIVEN("w <- default_world(), p <- point(-2, 2, -2)") {
+        const World w = World::default_world();
+        const Point p = point(-2, 2, -2);
+        THEN("w.is_shadowed(p) is false") {
+            REQUIRE(w.is_shadowed(p) == false);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace rtc::materials {
 
         bool operator==(const Material& other) const { return color == other.color && ambient == other.ambient && diffuse == other.diffuse && specular == other.specular && shininess == other.shininess; }
 
-        [[nodiscard]] Color lighting(const Light& light, const Point& pos, const Vector& eye_v, const Vector& normal_v) const;
+        [[nodiscard]] Color lighting(const Light& light, const Point& pos, const Vector& eye_v, const Vector& normal_v, const bool& in_shadow = false) const;
     };
 }
 

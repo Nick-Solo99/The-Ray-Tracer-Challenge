@@ -22,6 +22,7 @@ namespace rtc::world {
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const rays::Ray& r) const;
         [[nodiscard]] Color shade_hit(const intersections::Components& comps) const;
         [[nodiscard]] Color color_at(const rays::Ray& r) const;
+        [[nodiscard]] bool is_shadowed(const Point& p) const;
     };
 }
 

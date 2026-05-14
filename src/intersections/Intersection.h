@@ -28,6 +28,7 @@ namespace rtc::intersections {
         Vector eye_v{};
         Vector normal_v{};
         bool inside{};
+        Point over_point{};
     };
 
     struct Intersection {
