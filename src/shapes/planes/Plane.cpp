@@ -5,8 +5,10 @@
 #include "Plane.h"
 #include <intersections/Intersection.h>
 #include <typeinfo>
+#include <constants/Constants.h>
 
-constexpr float EPSILON = 0.005f;
+using namespace rtc::constants;
+
 
 namespace rtc::shapes::planes {
     bool Plane::operator==(const Shape &other) const {

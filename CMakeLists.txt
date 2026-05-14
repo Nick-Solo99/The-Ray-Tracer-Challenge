@@ -33,6 +33,7 @@ add_library(rtc_core
         src/camera/Camera.h
         src/shapes/planes/Plane.cpp
         src/shapes/planes/Plane.h
+        src/constants/Constants.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
