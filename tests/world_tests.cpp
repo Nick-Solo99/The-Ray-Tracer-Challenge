@@ -20,6 +20,8 @@ using namespace rtc::rays;
 using namespace rtc::shapes;
 using namespace rtc::intersections;
 
+constexpr float EPSILON = 0.00001f;
+
 SCENARIO("Creating a world") {
     GIVEN("w <- world()") {
         const World w{};
@@ -133,6 +135,49 @@ SCENARIO("Shading an intersection from the inside") {
             }
         }
 
+    }
+}
+
+SCENARIO("shade_hit() is given an intersection in shadow") {
+    GIVEN("w <- world(), w.lights[0] <- PointLight(point(0, 0, -10), color(1, 1, 1)),"
+          "s1 <- sphere(), s1 added to w,"
+          "s2 <- sphere(), s2.transform <- translation(0, 0, 10), s2 added to w,"
+          "r <- ray(point(0, 0, 5), vector(0, 0, 1)), i <- intersection(4, s2),") {
+        World w{};
+        w.lights.push_back(std::make_unique<PointLight>(point(0, 0, -10), color(1, 1, 1)));
+        w.objects.push_back(std::make_unique<Sphere>());
+        w.objects.push_back(std::make_unique<Sphere>());
+
+        const auto s1 = w.objects[0].get();
+        const auto s2 = w.objects[1].get();
+
+        s2->transform = translation(0, 0, 10);
+
+        const Ray r{point(0, 0, 5), vector(0, 0, 1)};
+        const Intersection i(4, s2);
+        WHEN("comps <- i.pre_compute(r), c <- shade_hit(comps)") {
+            const Components comps = i.pre_compute(r);
+            const Color c = w.shade_hit(comps);
+            THEN("c = color(0.1, 0.1, 0.1)") {
+                REQUIRE(c == color(0.1, 0.1, 0.1));
+            }
+        }
+    }
+}
+
+SCENARIO("The hit should offset the point") {
+    GIVEN("r <- ray(point(0, 0, -5), vector(0, 0, 1)), shape <- sphere(),"
+          "s.transform <- translation(0, 0, 1), i <- intersection(5, s)") {
+        const Ray r{point(0, 0, -5), vector(0, 0, 1)};
+        Sphere shape{};
+        shape.transform = translation(0, 0, 1);
+        const Intersection i(5, &shape);
+        WHEN("comps <- i.pre_compute(r)") {
+            const Components comps = i.pre_compute(r);
+            THEN("comps.over_point.z < -EPSILON/2") {
+                REQUIRE(comps.over_point.z < -EPSILON / 2.f);
+            }
+        }
     }
 }
 

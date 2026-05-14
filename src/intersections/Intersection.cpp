@@ -7,6 +7,8 @@
 #include <algorithm>
 
 namespace rtc::intersections {
+    constexpr float EPSILON = 0.00001f;
+
     Components Intersection::pre_compute(const rays::Ray &ray) const {
         Components comps;
 
@@ -23,6 +25,8 @@ namespace rtc::intersections {
         } else {
             comps.inside = false;
         }
+
+        comps.over_point = comps.point + comps.normal_v * EPSILON;
 
         return comps;
     }
