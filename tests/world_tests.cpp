@@ -219,7 +219,7 @@ SCENARIO("There is no shadow when nothing is collinear with point and light") {
         const World w = World::default_world();
         const Point p = point(0, 10, 0);
         THEN("w.is_shadowed(p) is false") {
-            REQUIRE(w.is_shadowed(p) == false);
+            REQUIRE(w.is_shadowed(p, *w.lights[0]) == false);
         }
     }
 }
@@ -229,7 +229,7 @@ SCENARIO("The shadow when an object is between the point and the light") {
         const World w = World::default_world();
         const Point p = point(10, -10, 10);
         THEN("w.is_shadowed(p) is true") {
-            REQUIRE(w.is_shadowed(p) == true);
+            REQUIRE(w.is_shadowed(p, *w.lights[0]) == true);
         }
     }
 }
@@ -239,7 +239,7 @@ SCENARIO("There is no shadow when an object is behind the light") {
         const World w = World::default_world();
         const Point p = point(-20, 20, -20);
         THEN("w.is_shadowed(p) is false") {
-            REQUIRE(w.is_shadowed(p) == false);
+            REQUIRE(w.is_shadowed(p, *w.lights[0]) == false);
         }
     }
 }
@@ -249,7 +249,7 @@ SCENARIO("There is no shadow when an object is behind the point") {
         const World w = World::default_world();
         const Point p = point(-2, 2, -2);
         THEN("w.is_shadowed(p) is false") {
-            REQUIRE(w.is_shadowed(p) == false);
+            REQUIRE(w.is_shadowed(p, *w.lights[0]) == false);
         }
     }
 }

@@ -13,13 +13,9 @@ namespace rtc::shapes::spheres {
     using namespace rtc::tuples;
 
     bool Sphere::operator==(const Shape &other) const {
-        if (typeid(*this) != typeid(other)) {
+        if (typeid(*this) != typeid(other) || material != other.material || transform != other.transform) {
             return false;
         }
-
-        const auto& other_sphere = dynamic_cast<const Sphere&>(other);
-
-
 
         return true;
     }
