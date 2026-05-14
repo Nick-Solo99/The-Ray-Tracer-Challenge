@@ -31,6 +31,9 @@ add_library(rtc_core
         src/world/World.h
         src/camera/Camera.cpp
         src/camera/Camera.h
+        src/shapes/planes/Plane.cpp
+        src/shapes/planes/Plane.h
+        src/constants/Constants.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -48,6 +51,7 @@ add_executable(tests
         tests/materials_tests.cpp
         tests/world_tests.cpp
         tests/camera_tests.cpp
+        tests/plane_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core
@@ -88,3 +92,5 @@ add_executable(FirstScene exercises/FirstScene.cpp
 target_link_libraries(FirstScene PRIVATE rtc_core)
 add_executable(RealShadows exercises/RealShadows.cpp)
 target_link_libraries(RealShadows PRIVATE rtc_core)
+add_executable(FirstPlane exercises/FirstPlane.cpp)
+target_link_libraries(FirstPlane PRIVATE rtc_core)

@@ -5,10 +5,11 @@
 #include <catch2/catch_test_macros.hpp>
 #include <cmath>
 #include "tuples/Tuple.h"
+#include <constants/Constants.h>
 
 using namespace rtc::tuples;
+using namespace rtc::constants;
 
-constexpr float EPSILON = 0.005f;
 
 SCENARIO("A tuple with w=1.0 is a point") {
     GIVEN("a <- tuple(4.3, -4.2, 3.1, 1.0)") {

@@ -5,10 +5,11 @@
 #include "Matrix.h"
 
 #include <stdexcept>
+#include <constants/Constants.h>
+
+using namespace rtc::constants;
 
 namespace rtc::matrices {
-
-    constexpr float EPSILON = 0.005f;
 
     Matrix::Matrix(std::initializer_list<std::initializer_list<float> > list) {
         rows = list.size();

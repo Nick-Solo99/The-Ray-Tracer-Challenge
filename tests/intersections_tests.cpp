@@ -8,13 +8,14 @@
 #include "shapes/spheres/Sphere.h"
 #include <rays/Ray.h>
 #include <transformations/Transformations.h>
+#include "constants/Constants.h"
 using namespace rtc::shapes::spheres;
 using namespace rtc::intersections;
 using namespace rtc::rays;
 using namespace rtc::transformations;
+using namespace rtc::constants;
 
 
-constexpr float EPSILON = 0.005f;
 
 SCENARIO("An intersection encapsulates t and object") {
     GIVEN("s <- sphere()") {

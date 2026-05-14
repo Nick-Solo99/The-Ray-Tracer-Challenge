@@ -46,7 +46,7 @@ namespace rtc::world {
         Color result = color(0, 0, 0);
 
         for (const auto& light : lights) {
-            const bool shadowed = is_shadowed(comps.over_point);
+            const bool shadowed = is_shadowed(comps.over_point, *light);
             result += comps.object->material.lighting(*light, comps.over_point, comps.eye_v, comps.normal_v, shadowed);
         }
 
@@ -61,8 +61,8 @@ namespace rtc::world {
         return color(0, 0, 0);
     }
 
-    bool World::is_shadowed(const Point& p) const {
-        const Vector v = lights[0]->position - p;
+    bool World::is_shadowed(const Point& p, const lights::Light& light) const {
+        const Vector v = light.position - p;
         const float distance = magnitude(v);
         const Vector direction = normalize(v);
 

@@ -5,9 +5,11 @@
 #include "Intersection.h"
 #include <span>
 #include <algorithm>
+#include <constants/Constants.h>
+
+using namespace rtc::constants;
 
 namespace rtc::intersections {
-    constexpr float EPSILON = 0.005f;
 
     Components Intersection::pre_compute(const rays::Ray &ray) const {
         Components comps;
@@ -39,7 +41,7 @@ namespace rtc::intersections {
 
     std::optional<Intersection> hit(const std::span<const Intersection> intersections) {
         for (const auto& intersection : intersections) {
-            if (intersection.t >= 0) {
+            if (intersection.t > EPSILON) {
                 return intersection;
             }
         }

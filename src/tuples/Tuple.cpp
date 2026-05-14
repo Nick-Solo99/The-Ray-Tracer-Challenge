@@ -6,10 +6,11 @@
 #include <cmath>
 #include <stdexcept>
 #include <string>
+#include <constants/Constants.h>
+
+using namespace rtc::constants;
 
 namespace rtc::tuples {
-
-    constexpr float EPSILON = 0.005f;
 
     bool Tuple::isPoint() const{
         return std::fabs(w - 1.0f) < EPSILON;
