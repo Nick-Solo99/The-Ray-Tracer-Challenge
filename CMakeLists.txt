@@ -34,6 +34,10 @@ add_library(rtc_core
         src/shapes/planes/Plane.cpp
         src/shapes/planes/Plane.h
         src/constants/Constants.h
+        src/patterns/Pattern.cpp
+        src/patterns/Pattern.h
+        src/patterns/stripes/StripePattern.cpp
+        src/patterns/stripes/StripePattern.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -52,6 +56,7 @@ add_executable(tests
         tests/world_tests.cpp
         tests/camera_tests.cpp
         tests/plane_tests.cpp
+        tests/patterns_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core

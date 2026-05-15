@@ -318,7 +318,8 @@ SCENARIO("A sphere has a default material") {
 SCENARIO("A sphere may be assigned a material") {
     GIVEN("s <- sphere(), m <- material(), m.ambient = 1") {
         Sphere s{};
-        Material m{ .ambient = 1 };
+        Material m;
+        m.ambient = 1;
 
         WHEN("s.material <- m") {
             s.material = m;

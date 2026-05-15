@@ -10,7 +10,12 @@
 namespace rtc::materials {
 
     Color Material::lighting(const Light &light, const Point &pos, const Vector &eye_v, const Vector &normal_v, const bool& in_shadow) const {
-        const Color effective_color = color * light.intensity;
+        Color active_color = color;
+        if (pattern != nullptr) {
+            active_color = pattern->color_at(pos);
+        }
+
+        const Color effective_color = active_color * light.intensity;
         const Vector light_v = normalize(light.position - pos);
         const Color ambient_cont = effective_color * this->ambient ;
         const float light_dot_normal = dot(light_v, normal_v);
