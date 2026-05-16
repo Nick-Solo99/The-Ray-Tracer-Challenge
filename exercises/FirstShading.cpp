@@ -54,7 +54,7 @@ int main() {
                 const Point hit_pos = r.position(h->t);
                 const Vector hit_norm = h->object->normal_at(hit_pos);
                 const Vector eye = -r.direction;
-                const Color pixel_color = s.material.lighting(light, position, eye, hit_norm);
+                const Color pixel_color = s.material.lighting(*h->object, light, position, eye, hit_norm);
                 canvas.write_pixel(x, y, pixel_color);
             }
         }

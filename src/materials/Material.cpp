@@ -9,10 +9,10 @@
 
 namespace rtc::materials {
 
-    Color Material::lighting(const Light &light, const Point &pos, const Vector &eye_v, const Vector &normal_v, const bool& in_shadow) const {
+    Color Material::lighting(const Shape& obj, const Light &light, const Point &pos, const Vector &eye_v, const Vector &normal_v, const bool& in_shadow) const {
         Color active_color = color;
         if (pattern != nullptr) {
-            active_color = pattern->color_at(pos);
+            active_color = pattern->color_at_obj(obj, pos);
         }
 
         const Color effective_color = active_color * light.intensity;

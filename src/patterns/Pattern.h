@@ -7,14 +7,23 @@
 
 #include <tuples/Tuple.h>
 #include <memory>
+#include <matrices/Matrix.h>
+
+namespace rtc::shapes {
+    class Shape;
+}
 
 using namespace rtc::tuples;
+using namespace rtc::matrices;
+using namespace rtc::shapes;
 
 namespace rtc::patterns {
     struct Pattern {
         Color a = color(0, 0, 0);
         Color b = color(1, 1, 1);
+        Matrix transform = Matrix::identity();
         [[nodiscard]] virtual Color color_at(const Point& point) const = 0;
+        [[nodiscard]] Color color_at_obj(const Shape& obj, const Point& point) const;
         [[nodiscard]] virtual std::unique_ptr<Pattern> clone() const = 0;
         virtual ~Pattern() = default;
     };

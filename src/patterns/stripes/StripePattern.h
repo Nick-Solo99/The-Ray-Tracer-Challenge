@@ -9,7 +9,7 @@
 
 namespace rtc::patterns::stripes {
     struct StripePattern final : Pattern {
-        StripePattern(const Color& a, const Color& b) { this->a = a; this->b = b; }
+        StripePattern(const Color& a, const Color& b) { this->a = a; this->b = b; transform = Matrix::identity(); }
         [[nodiscard]] Color color_at(const Point& point) const override;
         [[nodiscard]] std::unique_ptr<Pattern> clone() const override;
     };

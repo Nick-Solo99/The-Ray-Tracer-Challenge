@@ -33,6 +33,10 @@ namespace rtc::shapes::planes {
     }
 
     Vector Plane::normal_at(const Point &p) const {
-        return vector(0, 1, 0);
+        const Point obj_point = transform.inverse() * p;
+        const Vector obj_norm = vector(0, 1, 0);
+        Vector world_norm = transform.inverse().transpose() * obj_norm;
+        world_norm.w = 0;
+        return world_norm;
     }
 }
