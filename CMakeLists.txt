@@ -38,6 +38,8 @@ add_library(rtc_core
         src/patterns/Pattern.h
         src/patterns/stripes/StripePattern.cpp
         src/patterns/stripes/StripePattern.h
+        src/patterns/gradients/GradientPattern.cpp
+        src/patterns/gradients/GradientPattern.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
