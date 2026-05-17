@@ -9,12 +9,14 @@
 #include <shapes/spheres/Sphere.h>
 #include <patterns/Pattern.h>
 #include <patterns/gradients/GradientPattern.h>
+#include <patterns/rings/RingPattern.h>
 
 using namespace rtc::transformations;
 using namespace rtc::tuples;
 using namespace rtc::patterns::stripes;
 using namespace rtc::shapes::spheres;
 using namespace rtc::patterns::gradients;
+using namespace rtc::patterns::rings;
 
 SCENARIO("Creating a stripe pattern") {
     GIVEN("black <- color(0, 0, 0), white <- color(1, 1, 1), pattern <- StripePattern(white, black)") {
@@ -159,6 +161,26 @@ SCENARIO("A gradient linearly interpolates between colors") {
         }
         AND_THEN("pattern.color_at(point(0.75, 0, 0)) = color(0.25, 0.25, 0.25)") {
             REQUIRE(pattern.color_at(point(0.75f, 0, 0)) == color(0.25f, 0.25f, 0.25f));
+        }
+    }
+}
+
+SCENARIO("A ring should extend in both x and z") {
+    GIVEN("black <- color(0, 0 ,0), white <- color(1, 1, 1), pattern <- RingPattern(white, black)") {
+        const Color black = color(0, 0, 0);
+        const Color white = color(1, 1, 1);
+        const RingPattern pattern{white, black};
+        THEN("pattern.color_at(point(0, 0, 0)) = white") {
+            REQUIRE(pattern.color_at(point(0, 0, 0)) == white);
+        }
+        AND_THEN("pattern.color_at(point(1, 0, 0)) = black") {
+            REQUIRE(pattern.color_at(point(1, 0, 0)) == black);
+        }
+        AND_THEN("pattern.color_at(point(0, 0, 1)) = black") {
+            REQUIRE(pattern.color_at(point(0, 0, 1)) == black);
+        }
+        AND_THEN("pattern.color_at(point(0.708, 0, 0.708)) = black") {
+            REQUIRE(pattern.color_at(point(0.708f, 0, 0.708f)) == black);
         }
     }
 }
