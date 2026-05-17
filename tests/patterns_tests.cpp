@@ -10,6 +10,7 @@
 #include <patterns/Pattern.h>
 #include <patterns/gradients/GradientPattern.h>
 #include <patterns/rings/RingPattern.h>
+#include <patterns/checkers/CheckerPattern.h>
 
 using namespace rtc::transformations;
 using namespace rtc::tuples;
@@ -17,6 +18,7 @@ using namespace rtc::patterns::stripes;
 using namespace rtc::shapes::spheres;
 using namespace rtc::patterns::gradients;
 using namespace rtc::patterns::rings;
+using namespace rtc::patterns::checkers;
 
 SCENARIO("Creating a stripe pattern") {
     GIVEN("black <- color(0, 0, 0), white <- color(1, 1, 1), pattern <- StripePattern(white, black)") {
@@ -181,6 +183,55 @@ SCENARIO("A ring should extend in both x and z") {
         }
         AND_THEN("pattern.color_at(point(0.708, 0, 0.708)) = black") {
             REQUIRE(pattern.color_at(point(0.708f, 0, 0.708f)) == black);
+        }
+    }
+}
+
+SCENARIO("Checkers should repeat in x") {
+    GIVEN("black <- color(0, 0, 0), white <- color(1, 1, 1), pattern <- CheckerPattern(white, black)") {
+        const Color black = color(0, 0, 0);
+        const Color white = color(1, 1, 1);
+        const CheckerPattern pattern{white, black};
+        THEN("pattern.color_at(point(0, 0, 0)) = white") {
+            REQUIRE(pattern.color_at(point(0, 0, 0)) == white);
+        }
+        AND_THEN("pattern.color_at(point(0.99, 0, 0)) = white") {
+            REQUIRE(pattern.color_at(point(0.99f, 0, 0)) == white);
+        }
+        AND_THEN("pattern.color_at(point(1.01, 0, 0)) = black") {
+            REQUIRE(pattern.color_at(point(1.01f, 0, 0)) == black);
+        }
+    }
+}
+SCENARIO("Checkers should repeat in y") {
+    GIVEN("black <- color(0, 0, 0), white <- color(1, 1, 1), pattern <- CheckerPattern(white, black)") {
+        const Color black = color(0, 0, 0);
+        const Color white = color(1, 1, 1);
+        const CheckerPattern pattern{white, black};
+        THEN("pattern.color_at(point(0, 0, 0)) = white") {
+            REQUIRE(pattern.color_at(point(0, 0, 0)) == white);
+        }
+        AND_THEN("pattern.color_at(point(0, 0.99, 0)) = white") {
+            REQUIRE(pattern.color_at(point(0, 0.99f, 0)) == white);
+        }
+        AND_THEN("pattern.color_at(point(0, 1.01, 0)) = black") {
+            REQUIRE(pattern.color_at(point(0, 1.01f, 0)) == black);
+        }
+    }
+}
+SCENARIO("Checkers should repeat in z") {
+    GIVEN("black <- color(0, 0, 0), white <- color(1, 1, 1), pattern <- CheckerPattern(white, black)") {
+        const Color black = color(0, 0, 0);
+        const Color white = color(1, 1, 1);
+        const CheckerPattern pattern{white, black};
+        THEN("pattern.color_at(point(0, 0, 0)) = white") {
+            REQUIRE(pattern.color_at(point(0, 0, 0)) == white);
+        }
+        AND_THEN("pattern.color_at(point(0, 0, 0.99)) = white") {
+            REQUIRE(pattern.color_at(point(0, 0, 0.99f)) == white);
+        }
+        AND_THEN("pattern.color_at(point(0, 0, 1.01)) = black") {
+            REQUIRE(pattern.color_at(point(0, 0, 1.01f)) == black);
         }
     }
 }

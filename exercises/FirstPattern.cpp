@@ -14,6 +14,7 @@
 
 #include "patterns/gradients/GradientPattern.h"
 #include <patterns/rings/RingPattern.h>
+#include <patterns/checkers/CheckerPattern.h>
 
 using namespace rtc::world;
 using namespace rtc::camera;
@@ -24,6 +25,7 @@ using namespace rtc::shapes::planes;
 using namespace rtc::shapes::spheres;
 using namespace rtc::patterns::gradients;
 using namespace rtc::patterns::rings;
+using namespace rtc::patterns::checkers;
 
 int main() {
 
@@ -43,7 +45,7 @@ int main() {
 
     world.objects[3]->transform = Transform().rotate_x(std::numbers::pi_v<float> / 2.f).translate(0, 0, 3);
     for (const auto& obj : world.objects) {
-        obj->material.pattern = std::make_unique<StripePattern>(color(0, 0, 1), color(0, 1, 0));
+        obj->material.pattern = std::make_unique<CheckerPattern>(color(0, 0, 1), color(0, 1, 0));
     }
 
     world.objects.push_back(std::make_unique<Sphere>());
