@@ -44,6 +44,8 @@ add_library(rtc_core
         src/patterns/rings/RingPattern.h
         src/patterns/checkers/CheckerPattern.cpp
         src/patterns/checkers/CheckerPattern.h
+        src/patterns/gradients/RadialGradientPattern.cpp
+        src/patterns/gradients/RadialGradientPattern.h
 )
 
 target_include_directories(rtc_core PUBLIC src)

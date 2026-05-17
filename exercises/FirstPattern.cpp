@@ -11,7 +11,7 @@
 #include <patterns/stripes/StripePattern.h>
 #include <shapes/planes/Plane.h>
 #include <shapes/spheres/Sphere.h>
-
+#include <patterns/gradients/RadialGradientPattern.h>
 #include "patterns/gradients/GradientPattern.h"
 #include <patterns/rings/RingPattern.h>
 #include <patterns/checkers/CheckerPattern.h>
@@ -45,13 +45,13 @@ int main() {
 
     world.objects[3]->transform = Transform().rotate_x(std::numbers::pi_v<float> / 2.f).translate(0, 0, 3);
     for (const auto& obj : world.objects) {
-        obj->material.pattern = std::make_unique<CheckerPattern>(color(0, 0, 1), color(0, 1, 0));
+        obj->material.pattern = std::make_unique<StripePattern>(color(0, 0, 1), color(0, 1, 0));
     }
 
     world.objects.push_back(std::make_unique<Sphere>());
     world.objects[4]->transform = Transform().scale(2, 2, 2).translate(4, 2, 0);
-    world.objects[4]->material.pattern = std::make_unique<GradientPattern>(color(0, 0, 1), color(0, 1, 0));
-    world.objects[4]->material.pattern->transform = Transform().rotate_y(std::numbers::pi_v<float> / 2.f).scale(2.f, 2.f, 2.f);
+    world.objects[4]->material.pattern = std::make_unique<RadialGradientPattern>(color(0, 0, 1), color(0, 1, 0));
+    world.objects[4]->material.pattern->transform = Transform().rotate_y(std::numbers::pi_v<float> / 2.f).scale(0.5f, 0.5f, 0.5f);
 
     Camera camera{SCREEN_WIDTH, SCREEN_HEIGHT, std::numbers::pi_v<float> / 3.f};
     const Point from = point(3, 3, -10);
