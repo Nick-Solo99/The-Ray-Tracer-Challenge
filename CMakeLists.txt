@@ -49,6 +49,8 @@ add_library(rtc_core
         src/patterns/solid/SolidPattern.cpp
         src/patterns/solid/SolidPattern.h
         src/patterns/binary/BinaryPattern.h
+        src/patterns/blended/BlendedPattern.cpp
+        src/patterns/blended/BlendedPattern.h
 )
 
 target_include_directories(rtc_core PUBLIC src)

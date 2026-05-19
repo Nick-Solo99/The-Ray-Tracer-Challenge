@@ -13,6 +13,7 @@
 #include <chrono>
 #include <patterns/stripes/StripePattern.h>
 #include <patterns/checkers/CheckerPattern.h>
+#include <patterns/blended/BlendedPattern.h>
 
 
 using namespace rtc::world;
@@ -23,6 +24,7 @@ using namespace rtc::transformations;
 using namespace rtc::canvas;
 using namespace rtc::patterns::checkers;
 using namespace rtc::patterns::stripes;
+using namespace rtc::patterns::blended;
 
 constexpr int SCREEN_WIDTH = 256;
 constexpr int SCREEN_HEIGHT = 128;
@@ -45,6 +47,17 @@ int main() {
     CheckerPattern c{ std::make_unique<StripePattern>(a), std::make_unique<StripePattern>(b) };
 
     w.objects[0]->material.pattern = std::make_unique<CheckerPattern>(c);
+
+    w.objects.push_back(std::make_unique<Plane>());
+    w.objects[1]->transform = Transform().rotate_x(std::numbers::pi_v<float>/ 2.f).translate(0, 0, 3);
+
+    StripePattern d{color(0.5, 1, 0.5), color(0.4, 0.8, 0.4)};
+    StripePattern e{color(0.5, 1, 0.5), color(0.4, 0.8, 0.4)};
+    e.transform = Transform().rotate_y(std::numbers::pi_v<float> / 2.f);
+
+    BlendedPattern f{std::make_unique<StripePattern>(d), std::make_unique<StripePattern>(e) };
+
+    w.objects[1]->material.pattern = std::make_unique<BlendedPattern>(f);
 
     Camera cam{SCREEN_WIDTH, SCREEN_HEIGHT, std::numbers::pi_v<float> / 3.f};
     const Point from = point(0, 2, -5);
