@@ -34,6 +34,27 @@ add_library(rtc_core
         src/shapes/planes/Plane.cpp
         src/shapes/planes/Plane.h
         src/constants/Constants.h
+        src/patterns/Pattern.cpp
+        src/patterns/Pattern.h
+        src/patterns/stripes/StripePattern.cpp
+        src/patterns/stripes/StripePattern.h
+        src/patterns/gradients/GradientPattern.cpp
+        src/patterns/gradients/GradientPattern.h
+        src/patterns/rings/RingPattern.cpp
+        src/patterns/rings/RingPattern.h
+        src/patterns/checkers/CheckerPattern.cpp
+        src/patterns/checkers/CheckerPattern.h
+        src/patterns/gradients/RadialGradientPattern.cpp
+        src/patterns/gradients/RadialGradientPattern.h
+        src/patterns/solid/SolidPattern.cpp
+        src/patterns/solid/SolidPattern.h
+        src/patterns/binary/BinaryPattern.h
+        src/patterns/blended/BlendedPattern.cpp
+        src/patterns/blended/BlendedPattern.h
+        src/noise/PerlinNoise.cpp
+        src/noise/PerlinNoise.h
+        src/patterns/perturbed/PerturbedPattern.cpp
+        src/patterns/perturbed/PerturbedPattern.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -52,6 +73,7 @@ add_executable(tests
         tests/world_tests.cpp
         tests/camera_tests.cpp
         tests/plane_tests.cpp
+        tests/patterns_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core
@@ -94,3 +116,7 @@ add_executable(RealShadows exercises/RealShadows.cpp)
 target_link_libraries(RealShadows PRIVATE rtc_core)
 add_executable(FirstPlane exercises/FirstPlane.cpp)
 target_link_libraries(FirstPlane PRIVATE rtc_core)
+add_executable(FirstPattern exercises/FirstPattern.cpp)
+target_link_libraries(FirstPattern PRIVATE rtc_core)
+add_executable(NestedPatternExamples exercises/NestedPatternExamples.cpp)
+target_link_libraries(NestedPatternExamples PRIVATE rtc_core)

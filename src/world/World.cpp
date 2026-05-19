@@ -47,7 +47,7 @@ namespace rtc::world {
 
         for (const auto& light : lights) {
             const bool shadowed = is_shadowed(comps.over_point, *light);
-            result += comps.object->material.lighting(*light, comps.over_point, comps.eye_v, comps.normal_v, shadowed);
+            result += comps.object->material.lighting(*comps.object, *light, comps.over_point, comps.eye_v, comps.normal_v, shadowed);
         }
 
         return result;
