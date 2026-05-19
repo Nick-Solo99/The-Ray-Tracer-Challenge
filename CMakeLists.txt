@@ -46,6 +46,9 @@ add_library(rtc_core
         src/patterns/checkers/CheckerPattern.h
         src/patterns/gradients/RadialGradientPattern.cpp
         src/patterns/gradients/RadialGradientPattern.h
+        src/patterns/solid/SolidPattern.cpp
+        src/patterns/solid/SolidPattern.h
+        src/patterns/binary/BinaryPattern.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -109,3 +112,5 @@ add_executable(FirstPlane exercises/FirstPlane.cpp)
 target_link_libraries(FirstPlane PRIVATE rtc_core)
 add_executable(FirstPattern exercises/FirstPattern.cpp)
 target_link_libraries(FirstPattern PRIVATE rtc_core)
+add_executable(NestedPatternExamples exercises/NestedPatternExamples.cpp)
+target_link_libraries(NestedPatternExamples PRIVATE rtc_core)

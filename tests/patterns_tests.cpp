@@ -26,10 +26,10 @@ SCENARIO("Creating a stripe pattern") {
         const Color white = color(1, 1, 1);
         const StripePattern pattern{white, black};
         THEN("pattern.a = white") {
-           REQUIRE(pattern.a == white);
+           REQUIRE(pattern.a->color_at(point(0, 0, 0)) == white);
         }
         AND_THEN("pattern.b = black") {
-           REQUIRE(pattern.b == black);
+           REQUIRE(pattern.b->color_at(point(0, 0, 0)) == black);
         }
     }
 }
