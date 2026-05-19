@@ -51,6 +51,10 @@ add_library(rtc_core
         src/patterns/binary/BinaryPattern.h
         src/patterns/blended/BlendedPattern.cpp
         src/patterns/blended/BlendedPattern.h
+        src/noise/PerlinNoise.cpp
+        src/noise/PerlinNoise.h
+        src/patterns/perturbed/PerturbedPattern.cpp
+        src/patterns/perturbed/PerturbedPattern.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
