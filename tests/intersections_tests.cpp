@@ -9,11 +9,13 @@
 #include <rays/Ray.h>
 #include <transformations/Transformations.h>
 #include "constants/Constants.h"
+#include <shapes/planes/Plane.h>
 using namespace rtc::shapes::spheres;
 using namespace rtc::intersections;
 using namespace rtc::rays;
 using namespace rtc::transformations;
 using namespace rtc::constants;
+using namespace rtc::shapes::planes;
 
 
 
@@ -215,6 +217,20 @@ SCENARIO("The hit should offset the point") {
             }
             AND_THEN("comps.point.z > comps.over_point.z") {
                 REQUIRE(comps.point.z > comps.over_point.z);
+            }
+        }
+    }
+}
+
+SCENARIO("Precomputing the reflection vector") {
+    GIVEN("shape <- plane(), r <- ray(point(0, 1, -1), vector(0, -sqrt(2)/2, sqrt(2)/2, i <- intersection(sqrt(2)/2, shape)") {
+        const Plane plane{};
+        const Ray r{point(0, 1, -1), vector(0, -std::sqrtf(2.f)/2.f, std::sqrtf(2.f)/2.f)};
+        const Intersection i{std::sqrtf(2.f)/2.f, &plane};
+        WHEN("comps <- i.pre_compute(r)") {
+            const Components comps = i.pre_compute(r);
+            THEN("comps.reflect_v = vector(0, sqrt(2)/2, sqrt(2)/2)") {
+                REQUIRE(comps.reflect_v == vector(0, std::sqrtf(2.f)/2.f, std::sqrtf(2.f)/2.f));
             }
         }
     }

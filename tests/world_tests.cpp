@@ -11,6 +11,7 @@
 #include <rays/Ray.h>
 #include <intersections/Intersection.h>
 #include <algorithm>
+#include <shapes/planes/Plane.h>
 
 using namespace rtc::world;
 using namespace rtc::lights::point;
@@ -19,6 +20,7 @@ using namespace rtc::transformations;
 using namespace rtc::rays;
 using namespace rtc::shapes;
 using namespace rtc::intersections;
+using namespace rtc::shapes::planes;
 
 
 
@@ -250,6 +252,104 @@ SCENARIO("There is no shadow when an object is behind the point") {
         const Point p = point(-2, 2, -2);
         THEN("w.is_shadowed(p) is false") {
             REQUIRE(w.is_shadowed(p, *w.lights[0]) == false);
+        }
+    }
+}
+
+SCENARIO("The reflected color for a non reflective material") {
+    GIVEN("w <- default_world(), r <- ray(point(0, 0, 0), vector(0, 0, 1)), w.objects[1].material.ambient <- 1, i <- intersection(1, w.objects[1])") {
+        World w = World::default_world();
+        const Ray r{point(0, 0, 0), vector(0, 0, 1)};
+        w.objects[1]->material.ambient = 1;
+        const Intersection i{1, w.objects[1].get()};
+        WHEN("comps <- i.pre_compute(r), color <- w.reflected_color(comps)") {
+            const Components comps = i.pre_compute(r);
+            const Color c = w.reflected_color(comps);
+            THEN("c = color(0, 0 ,0)") {
+                REQUIRE(c == color(0, 0, 0));
+            }
+        }
+    }
+}
+
+SCENARIO("The reflected color for a reflective material") {
+    GIVEN("w <- default_world(), shape <- plane(), shape.material.reflective <- 0.5, shape.transform <- translation(0, -1, 0),"
+          "shape added to w, r <- ray(point(0, 0, -3), vector(0, -sqrt(2)/2, sqrt(2)/2), i <- intersection(sqrt(2), shape)") {
+        World w = World::default_world();
+        Plane shape{};
+        shape.material.reflective = 0.5f;
+        shape.transform = translation(0, -1, 0);
+        w.objects.push_back(std::make_unique<Plane>(shape));
+        const Ray r{point(0, 0, -3), vector(0, -std::sqrtf(2.f)/2.f, std::sqrtf(2.f)/2.f)};
+        const Intersection i{std::sqrtf(2.f), w.objects[2].get()};
+        WHEN("comps <- i.pre_compute(r), color <- w.reflected_color(comps)") {
+            const Components comps = i.pre_compute(r);
+            const Color c = w.reflected_color(comps);
+            THEN("c = color(0.19032, 0.2379 ,0.14274)") {
+                REQUIRE(c == color(0.19032f, 0.2379f, 0.14274f));
+            }
+        }
+    }
+}
+
+SCENARIO("shade_hit() with a reflective material") {
+    GIVEN("w <- default_world(), shape <- plane(), shape.material.reflective <- 0.5, shape.transform <- translation(0, -1, 0),"
+          "shape added to w, r <- ray(point(0, 0, -3), vector(0, -sqrt(2)/2, sqrt(2)/2)), i <- intersection(sqrt(2), shape)") {
+        World w = World::default_world();
+        Plane shape{};
+        shape.material.reflective = 0.5f;
+        shape.transform = translation(0, -1, 0);
+        w.objects.push_back(std::make_unique<Plane>(shape));
+        const Ray r{point(0, 0, -3), vector(0, -std::sqrt(2.f)/2.f, std::sqrt(2.f)/2.f)};
+        const Intersection i{std::sqrtf(2.f), w.objects[2].get()};
+        WHEN("comps <- i.pre_compute(r), c <- w.shade_hit(comps)") {
+            const Components comps = i.pre_compute(r);
+            const Color c = w.shade_hit(comps);
+            THEN("c = color(0.87677, 0.92436, 0.82918)") {
+                REQUIRE(c == color(0.87677f, 0.92436f, 0.82918f));
+            }
+        }
+    }
+}
+
+SCENARIO("color_at() with mutually reflective surfaces") {
+    GIVEN("w <- world(), w.light <- PointLight(point(0, 0, 0), color(1, 1, 1)), lower <- plane(),"
+          "lower.material.reflective <- 1, lower.transform <- translation(0, -1, 0), lower added to w,"
+          "upper <- plane, upper.material.reflective <- 1, upper.transform <- translation(0, 1, 0), upper added to w,"
+          "r <- ray(point(0, 0, 0), vector(0, 1, 0))") {
+        World w{};
+        w.lights.push_back(std::make_unique<PointLight>(point(0, 0, 0), color(1, 1, 1)));
+        Plane lower{};
+        lower.material.reflective = 1.f;
+        lower.transform = translation(0, -1, 0);
+        w.objects.push_back(std::make_unique<Plane>(lower));
+        Plane upper{};
+        upper.material.reflective = 1.f;
+        upper.transform = translation(0, 1, 0);
+        w.objects.push_back(std::make_unique<Plane>(upper));
+        const Ray r{point(0, 0, 0), vector(0, 1, 0)};
+        THEN("w.color_at(r) should terminate successfully") {
+            REQUIRE_NOTHROW(w.color_at(r));
+        }
+    }
+}
+
+SCENARIO("The reflected color at the maximum recursive depth") {
+    GIVEN("w <- default_world(), shape <- plane(), shape.material.reflective <- 0.5, shape.transform <- translation(0, -1, 0),"
+          "shape added to w, r <- ray(point(0, 0, -3), vector(0, -sqrt(2)/2, sqrt(2)/2)), i <- intersection(sqrt(2), shape)") {
+        World w = World::default_world();
+        Plane shape{};
+        shape.material.reflective = 0.5f;
+        shape.transform = translation(0, -1, 0);
+        w.objects.push_back(std::make_unique<Plane>(shape));
+        const Ray r{point(0, 0, -3), vector(0, -std::sqrtf(2.f)/2.f, std::sqrtf(2.f)/2.f)};
+        const Intersection i{std::sqrtf(2.f), w.objects[2].get()};
+        WHEN("comps <- i.pre_compute(r), c <- w.reflected_color(comps, 0)") {
+            const Components comps = i.pre_compute(r);
+            const Color c = w.reflected_color(comps, 0);
+            THEN("c = color(0, 0, 0)") {
+                REQUIRE(c == color(0, 0, 0));
+            }
         }
     }
 }

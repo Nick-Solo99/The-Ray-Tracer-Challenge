@@ -25,12 +25,15 @@ namespace rtc::materials {
         float diffuse = 0.9f;
         float specular = 0.9f;
         float shininess = 200.0f;
+        float reflective = 0.0f;
         std::unique_ptr<Pattern> pattern = nullptr;
 
         Material() = default;
-        Material(const Color& color, const float ambient, const float diffuse, const float specular, const float shininess, std::unique_ptr<Pattern> pattern = nullptr)
-        : color(color), ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess), pattern(std::move(pattern)) {}
-        Material(const Material& other) : color(other.color), ambient(other.ambient), diffuse(other.diffuse), specular(other.specular), shininess(other.shininess),pattern(other.pattern ? other.pattern->clone() : nullptr){}
+        Material(const Color& color, const float ambient, const float diffuse, const float specular, const float shininess, const float reflective, std::unique_ptr<Pattern> pattern = nullptr)
+        : color(color), ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess), reflective(reflective), pattern(std::move(pattern)) {}
+        Material(const Material& other)
+        : color(other.color), ambient(other.ambient), diffuse(other.diffuse), specular(other.specular), shininess(other.shininess),
+        reflective(other.reflective), pattern(other.pattern ? other.pattern->clone() : nullptr){}
         Material& operator=(const Material& other) {
             if (this != &other) {
                 color = other.color;
@@ -38,6 +41,7 @@ namespace rtc::materials {
                 diffuse = other.diffuse;
                 specular = other.specular;
                 shininess = other.shininess;
+                reflective = other.reflective;
                 pattern = other.pattern ? other.pattern->clone() : nullptr;
             }
             return *this;
@@ -47,7 +51,7 @@ namespace rtc::materials {
 
 
 
-        bool operator==(const Material& other) const { return color == other.color && ambient == other.ambient && diffuse == other.diffuse && specular == other.specular && shininess == other.shininess; }
+        bool operator==(const Material& other) const { return color == other.color && ambient == other.ambient && diffuse == other.diffuse && specular == other.specular && shininess == other.shininess && pattern == other.pattern && reflective == other.reflective; }
 
         [[nodiscard]] Color lighting(const Shape& obj, const Light& light, const Point& pos, const Vector& eye_v, const Vector& normal_v, const bool& in_shadow = false) const;
     };

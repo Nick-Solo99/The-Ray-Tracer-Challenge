@@ -30,6 +30,8 @@ namespace rtc::intersections {
 
         comps.over_point = comps.point + comps.normal_v * EPSILON;
 
+        comps.reflect_v = ray.direction.reflect(comps.normal_v);
+
         return comps;
     }
 

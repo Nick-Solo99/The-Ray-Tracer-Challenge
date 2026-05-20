@@ -6,6 +6,7 @@
 #include "lights/point/PointLight.h"
 #include <shapes/spheres/Sphere.h>
 #include <transformations/Transformations.h>
+#include <constants/Constants.h>
 
 using namespace rtc::lights::point;
 using namespace rtc::shapes::spheres;
@@ -42,21 +43,22 @@ namespace rtc::world {
         return intersections;
     }
 
-    Color World::shade_hit(const intersections::Components &comps) const {
+    Color World::shade_hit(const intersections::Components &comps, const size_t& remaining) const {
         Color result = color(0, 0, 0);
 
         for (const auto& light : lights) {
             const bool shadowed = is_shadowed(comps.over_point, *light);
             result += comps.object->material.lighting(*comps.object, *light, comps.over_point, comps.eye_v, comps.normal_v, shadowed);
+            result += reflected_color(comps, remaining);
         }
 
         return result;
     }
 
-    Color World::color_at(const rays::Ray &r) const {
+    Color World::color_at(const rays::Ray &r, const size_t& remaining) const {
         const auto xs = intersect(r);
         if (const auto& h = hit(xs)) {
-            return shade_hit(h->pre_compute(r));
+            return shade_hit(h->pre_compute(r), remaining);
         }
         return color(0, 0, 0);
     }
@@ -72,5 +74,16 @@ namespace rtc::world {
             return true;
         }
         return false;
+    }
+
+    Color World::reflected_color(const intersections::Components &comps, const size_t& remaining) const {
+        if (remaining < 1 || comps.object->material.reflective < constants::EPSILON) {
+            return color(0, 0, 0);
+        }
+
+        const Ray reflect_ray{comps.over_point, comps.reflect_v};
+        const Color c = color_at(reflect_ray, remaining - 1);
+
+        return c * comps.object->material.reflective;
     }
 }

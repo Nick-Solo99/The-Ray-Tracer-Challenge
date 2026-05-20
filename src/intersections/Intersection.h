@@ -22,13 +22,14 @@ namespace rtc::shapes {
 namespace rtc::intersections {
 
     struct Components {
-        const shapes::Shape* object = nullptr;
+        const Shape* object = nullptr;
         float t{};
         Point point{};
         Vector eye_v{};
         Vector normal_v{};
         bool inside{};
         Point over_point{};
+        Vector reflect_v{};
     };
 
     struct Intersection {
