@@ -11,6 +11,7 @@
 #include <patterns/gradients/GradientPattern.h>
 #include <patterns/rings/RingPattern.h>
 #include <patterns/checkers/CheckerPattern.h>
+#include <patterns/test/TestPattern.h>
 
 using namespace rtc::transformations;
 using namespace rtc::tuples;
@@ -19,6 +20,7 @@ using namespace rtc::shapes::spheres;
 using namespace rtc::patterns::gradients;
 using namespace rtc::patterns::rings;
 using namespace rtc::patterns::checkers;
+using namespace rtc::patterns::test;
 
 SCENARIO("Creating a stripe pattern") {
     GIVEN("black <- color(0, 0, 0), white <- color(1, 1, 1), pattern <- StripePattern(white, black)") {
@@ -232,6 +234,70 @@ SCENARIO("Checkers should repeat in z") {
         }
         AND_THEN("pattern.color_at(point(0, 0, 1.01)) = black") {
             REQUIRE(pattern.color_at(point(0, 0, 1.01f)) == black);
+        }
+    }
+}
+
+SCENARIO("The default pattern transformation") {
+    GIVEN("pattern <- TestPattern()") {
+        const TestPattern pattern{};
+        THEN("pattern.transform = Matrix::identity()") {
+            REQUIRE(pattern.transform == Matrix::identity());
+        }
+    }
+}
+
+SCENARIO("Assigning a transformation") {
+    GIVEN("pattern <- TestPattern()") {
+        TestPattern pattern{};
+        WHEN("pattern.transform <- translation(1, 2, 3)") {
+            pattern.transform = translation(1, 2, 3);
+            THEN("pattern.transform = translation(1, 2, 3)") {
+                REQUIRE(pattern.transform == translation(1, 2, 3));
+            }
+        }
+    }
+}
+
+SCENARIO("A pattern with an object transformation") {
+    GIVEN("shape <- sphere(), sphere.transform <- scaling(2, 2, 2), pattern <- TestPattern()") {
+        Sphere shape{};
+        shape.transform = scaling(2, 2, 2);
+        const TestPattern pattern{};
+        WHEN("c <- pattern.color_at_obj(shape, point(2, 3, 4))") {
+            const Color c = pattern.color_at_obj(shape, point(2, 3, 4));
+            THEN("c = color(1, 1.5, 2)") {
+                REQUIRE(c == color(1, 1.5, 2));
+            }
+        }
+    }
+}
+
+SCENARIO("A pattern with a pattern transformation") {
+    GIVEN("shape <- sphere(), pattern <- TestPattern(), pattern.transform <- scaling(2, 2, 2)") {
+        const Sphere shape{};
+        TestPattern pattern{};
+        pattern.transform = scaling(2, 2, 2);
+        WHEN("c <- pattern.color_at_obj(shape, point(2, 3, 4))") {
+            const Color c = pattern.color_at_obj(shape, point(2, 3, 4));
+            THEN("c = color(1, 1.5, 2)") {
+                REQUIRE(c == color(1, 1.5, 2));
+            }
+        }
+    }
+}
+
+SCENARIO("A pattern with both an object and a pattern transformation") {
+    GIVEN("shape <- sphere(), shape.transform <- scaling(2, 2, 2), pattern <- TestPattern(), pattern.transform <- translation(0.5, 1, 1.5)") {
+        Sphere shape{};
+        shape.transform = scaling(2, 2, 2);
+        TestPattern pattern{};
+        pattern.transform = translation(0.5, 1, 1.5);
+        WHEN("c <- pattern.color_at_obj(shape, point(2.5, 3, 3.5))") {
+            const Color c = pattern.color_at_obj(shape, point(2.5, 3, 3.5));
+            THEN("c = color(0.75, 0.5, 0.25)") {
+                REQUIRE(c == color(0.75, 0.5, 0.25));
+            }
         }
     }
 }

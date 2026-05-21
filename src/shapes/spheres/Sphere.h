@@ -15,6 +15,9 @@ namespace rtc::shapes::spheres {
 
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const Ray& ray) const override;
         [[nodiscard]] tuples::Vector normal_at(const tuples::Point& p) const override;
+
+        //return a glass sphere
+        static Sphere glass();
     };
 
 

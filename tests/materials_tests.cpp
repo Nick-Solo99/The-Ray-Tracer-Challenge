@@ -195,3 +195,24 @@ SCENARIO("Lighting with pattern applied") {
         }
     }
 }
+
+SCENARIO("Reflectivity for the default material") {
+    GIVEN("m <- material()") {
+        const Material m;
+        THEN("m.reflective = 0.0") {
+            REQUIRE(m.reflective == 0.0f);
+        }
+    }
+}
+
+SCENARIO("Transparency and Refractive Index for the default material") {
+    GIVEN("m <- material()") {
+        const Material m;
+        THEN("m.transparency = 0.0") {
+            REQUIRE(m.transparency == 0.0f);
+        }
+        AND_THEN("m.refractive_index = 1.0") {
+            REQUIRE(m.refractive_index == 1.0f);
+        }
+    }
+}

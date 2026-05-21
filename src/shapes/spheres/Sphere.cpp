@@ -49,4 +49,11 @@ namespace rtc::shapes::spheres {
         world_normal.w = 0;
         return normalize(world_normal);
     }
+
+    Sphere Sphere::glass() {
+        Sphere sphere;
+        sphere.material.transparency = 1.0;
+        sphere.material.refractive_index = 1.5;
+        return sphere;
+    }
 }

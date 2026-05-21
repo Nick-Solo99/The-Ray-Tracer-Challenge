@@ -334,3 +334,18 @@ SCENARIO("A sphere may be assigned a material") {
         }
     }
 }
+
+SCENARIO("static function for producing a sphere with a glassy material") {
+    GIVEN("s <- Sphere::glass()") {
+        const Sphere s = Sphere::glass();
+        THEN("s.transform = identity_matrix") {
+            REQUIRE(s.transform == Matrix::identity());
+        }
+        AND_THEN("s.material.transparency = 1.0") {
+            REQUIRE(s.material.transparency == 1.0f);
+        }
+        AND_THEN("s.material.refractive_index = 1.5") {
+            REQUIRE(s.material.refractive_index == 1.5f);
+        }
+    }
+}
