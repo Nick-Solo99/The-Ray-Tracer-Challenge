@@ -12,6 +12,7 @@
 #include <intersections/Intersection.h>
 #include <algorithm>
 #include <shapes/planes/Plane.h>
+#include <patterns/test/TestPattern.h>
 
 using namespace rtc::world;
 using namespace rtc::lights::point;
@@ -21,6 +22,7 @@ using namespace rtc::rays;
 using namespace rtc::shapes;
 using namespace rtc::intersections;
 using namespace rtc::shapes::planes;
+using namespace rtc::patterns::test;
 
 
 
@@ -349,6 +351,141 @@ SCENARIO("The reflected color at the maximum recursive depth") {
             const Color c = w.reflected_color(comps, 0);
             THEN("c = color(0, 0, 0)") {
                 REQUIRE(c == color(0, 0, 0));
+            }
+        }
+    }
+}
+
+SCENARIO("The refracted color with an opaque surface") {
+    GIVEN("w <- default_world(), shape <- w.objects[0], r <- Ray(point(0, 0, -5), vector(0, 0, 1)), xs <- intersections({4, shape}, {6, shape})") {
+        const World w = World::default_world();
+        const Shape* shape = w.objects[0].get();
+        const Ray r{point(0, 0, -5), vector(0, 0, 1)};
+        const auto xs = intersections({{4, shape}, {6, shape}});
+        WHEN("comps <- xs[0].pre_compute(r, xs), c <- w.refracted_color(comps, 5)") {
+            const Components comps = xs[0].pre_compute(r, xs);
+            const Color c = w.refracted_color(comps, 5);
+            THEN("c = color(0, 0, 0)") {
+                REQUIRE(c == color(0, 0, 0));
+            }
+        }
+    }
+}
+
+SCENARIO("The refracted color at the maximum recursive depth") {
+    GIVEN("w <- default_world(), shape <- w.objects[0], shape.material.transparency = 1.0, shape.material.refractive_index = 1.5,"
+          "r <- Ray(point(0, 0, -5), vector(0, 0, 1)), xs <- intersections({4, shape}, {6, shape})") {
+        const World w = World::default_world();
+        Shape* shape = w.objects[0].get();
+        shape->material.transparency = 1.f;
+        shape->material.refractive_index = 1.5f;
+        const Ray r{point(0, 0, -5), vector(0, 0, 1)};
+        const auto xs = intersections({{4, shape}, {6, shape}});
+        WHEN("comps <- xs[0].pre_compute(r, xs), c <- w.refracted_color(comps, 0)") {
+            const Components comps = xs[0].pre_compute(r, xs);
+            const Color c = w.refracted_color(comps, 0);
+            THEN("c = color(0, 0, 0)") {
+                REQUIRE(c == color(0, 0, 0));
+            }
+        }
+    }
+}
+
+SCENARIO("The refracted color under total internal reflection") {
+    GIVEN("w <- default_world(), shape <- w.objects[0], shape.material.transparency = 1.0, shape.material.refractive_index = 1.5,"
+          "r <- Ray(point(0, 0, sqrt(2)/2), vector(0, 1, 0)), xs <- intersections({-sqrt(2)/2, shape}, {sqrt(2)/2, shape})") {
+        const World w = World::default_world();
+        Shape* shape = w.objects[0].get();
+        shape->material.transparency = 1.f;
+        shape->material.refractive_index = 1.5f;
+        const Ray r{point(0, 0, std::sqrtf(2.f)/2.f), vector(0, 1, 0)};
+        const auto xs = intersections({{-std::sqrtf(2.f)/2.f, shape}, {std::sqrtf(2.f) / 2.f, shape}});
+        WHEN("comps <- xs[1].pre_compute(r, xs), c <- w.refracted_color(comps, 5)") {
+            const Components comps = xs[1].pre_compute(r, xs);
+            const Color c = w.refracted_color(comps, 5);
+            THEN("c = color(0, 0, 0)") {
+                REQUIRE(c == color(0, 0, 0));
+            }
+        }
+    }
+}
+
+SCENARIO("The refracted color with a refracted ray") {
+    GIVEN("w <- default_world(), A <- w.objects[0], A.material.ambient <- 1.0, A.material.pattern <- TestPattern(),"
+          "B <- w.objects[1], B.material.transparency <- 1.0, B.material.refractive_index <- 1.5,"
+          "r <- ray(point(0, 0, 0.1), vector(0, 1, 0)), xs <- intersections({{-0.9899, A}, {-0.4899, B}, {0.4899, B}, {0.9899, A})") {
+        World w = World::default_world();
+        Shape* A = w.objects[0].get();
+        A->material.ambient = 1.f;
+        A->material.pattern = std::make_unique<TestPattern>();
+        Shape* B = w.objects[1].get();
+        B->material.transparency = 1.f;
+        B->material.refractive_index = 1.5f;
+        const Ray r{point(0, 0, 0.1), vector(0, 1, 0)};
+        const auto xs = intersections({{-0.9899, A}, {-0.4899, B}, {0.4899, B}, {0.9899, A}});
+        WHEN("comps <- xs[2].pre_compute(r, xs), c <- w.refracted_color(comps, 5)") {
+            const Components comps = xs[2].pre_compute(r, xs);
+            const Color c = w.refracted_color(comps, 5);
+            THEN("c = color(0, 0.99888, 0.04725)") {
+                REQUIRE(c == color(0, 0.99888, 0.04725));
+            }
+        }
+    }
+}
+
+SCENARIO("shade_hit() with a transparent material") {
+    GIVEN("w <- default_world(), floor <- Plane(), floor.transform <- translation(0, -1, 0), floor.material.transparency <- 0.5,"
+          "floor.material.refractive_index <- 1.5, floor is added to w,"
+          "ball <- sphere(), ball.material.color <- color(1, 0, 0), ball.material.ambient <- 0.5, ball.transform <- translation(0, -3.5, -0.5), ball added to w,"
+          "r <- ray(point(0, 0, -3), vector(0, -sqrt(2)/2, sqrt(2)/2), xs <- intersections({{sqrt(2), floor}})") {
+        World w = World::default_world();
+        Plane floor{};
+        floor.transform = translation(0, -1, 0);
+        floor.material.transparency = .5f;
+        floor.material.refractive_index = 1.5f;
+        w.objects.push_back(std::make_unique<Plane>(floor));
+        Sphere ball{};
+        ball.material.color = color(1, 0, 0);
+        ball.material.ambient = .5f;
+        ball.transform = translation(0, -3.5, -0.5);
+        w.objects.push_back(std::make_unique<Sphere>(ball));
+        const Ray r{point(0, 0, -3), vector(0, -std::sqrtf(2.f)/2.f, std::sqrtf(2.f)/2.f)};
+        const auto xs = intersections({{std::sqrtf(2.f), &floor}});
+        WHEN("comps <- xs[0].pre_compute(r, xs), c <- w.shade_hit(comps, 5)") {
+            const Components comps = xs[0].pre_compute(r, xs);
+            const Color c = w.shade_hit(comps, 5);
+            THEN("c = color(0.93642, 0.68642, 0.68642)") {
+                REQUIRE(c == color(0.93642, 0.68642, 0.68642));
+            }
+        }
+    }
+}
+
+SCENARIO("shade_hit() with a reflective, transparent material") {
+    GIVEN("w <- default_world(), r <- ray(point(0, 0, -3), vector(0, -sqrt(2)/2, sqrt(2)/2)),"
+          "floor <- plane(), floor.transform <- translation(0, -1, 0), floor.material.reflective <- 0.5,"
+          "floor.material.transparency <- 0.5, floor.material.refractive_index <- 1.5, floor is added to w,"
+          "ball <- sphere(), ball.material.color <- color(1, 0, 0), ball.material.ambient <- 0.5, ball.transform <- translation(0, -3.5, -0.5), ball added to w,"
+          "xs <- intersections({{sqrt(2), floor}})") {
+        World w = World::default_world();
+        const Ray r{point(0, 0, -3), vector(0, -std::sqrtf(2.f)/2.f, std::sqrtf(2.f)/2.f)};
+        Plane floor{};
+        floor.transform = translation(0, -1, 0);
+        floor.material.reflective = .5f;
+        floor.material.transparency = .5f;
+        floor.material.refractive_index = 1.5f;
+        w.objects.push_back(std::make_unique<Plane>(floor));
+        Sphere ball{};
+        ball.material.color = color(1, 0, 0);
+        ball.material.ambient = .5f;
+        ball.transform = translation(0, -3.5, -0.5);
+        w.objects.push_back(std::make_unique<Sphere>(ball));
+        const auto xs = intersections({{std::sqrtf(2.f), &floor}});
+        WHEN("comps <- xs[0].pre_compute(r, xs), c <- w.shade_hit(comps, 5)") {
+            const Components comps = xs[0].pre_compute(r, xs);
+            const Color c = w.shade_hit(comps, 5);
+            THEN("c = color(0.93391, 0.69643, 0.69243)") {
+                REQUIRE(c == color(0.93391f, 0.69643f, 0.69243f));
             }
         }
     }

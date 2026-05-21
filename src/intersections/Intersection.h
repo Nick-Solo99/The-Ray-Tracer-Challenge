@@ -30,23 +30,26 @@ namespace rtc::intersections {
         bool inside{};
         Point over_point{};
         Vector reflect_v{};
+        float n1{};
+        float n2{};
+        Point under_point{};
     };
 
     struct Intersection {
         float t = 0.0f;
-        const shapes::Shape* object = nullptr;
+        const Shape* object = nullptr;
 
         bool operator==(const Intersection& other) const { return object == other.object && t == other.t; }
         bool operator!=(const Intersection& other) const { return !(*this == other); }
         bool operator<(const Intersection& other) const { return t < other.t; }
 
-        [[nodiscard]] Components pre_compute(const rays::Ray& ray) const;
+        [[nodiscard]] Components pre_compute(const rays::Ray& ray, const std::vector<Intersection>& xs) const;
+        [[nodiscard]] Components pre_compute(const rays::Ray& ray) const { return pre_compute(ray, {*this}); }
     };
-
-
 
     std::vector<Intersection> intersections(std::initializer_list<Intersection> list);
     std::optional<Intersection> hit(std::span<const Intersection> intersections);
+    float schlick(const Components& comps);
 
 }
 

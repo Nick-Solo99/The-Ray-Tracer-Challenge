@@ -27,6 +27,7 @@ namespace rtc::world {
         [[nodiscard]] Color color_at(const rays::Ray& r, const size_t& remaining = RECURSION_DEPTH) const;
         [[nodiscard]] bool is_shadowed(const Point& p, const lights::Light& light) const;
         [[nodiscard]] Color reflected_color(const intersections::Components& comps, const size_t& remaining = RECURSION_DEPTH) const;
+        [[nodiscard]] Color refracted_color(const intersections::Components& comps, const size_t& remaining = RECURSION_DEPTH) const;
     };
 }
 

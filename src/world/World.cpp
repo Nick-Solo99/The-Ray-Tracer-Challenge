@@ -44,21 +44,25 @@ namespace rtc::world {
     }
 
     Color World::shade_hit(const intersections::Components &comps, const size_t& remaining) const {
-        Color result = color(0, 0, 0);
+        Color surface = color(0, 0, 0);
 
         for (const auto& light : lights) {
             const bool shadowed = is_shadowed(comps.over_point, *light);
-            result += comps.object->material.lighting(*comps.object, *light, comps.over_point, comps.eye_v, comps.normal_v, shadowed);
-            result += reflected_color(comps, remaining);
+            surface += comps.object->material.lighting(*comps.object, *light, comps.over_point, comps.eye_v, comps.normal_v, shadowed);
         }
-
-        return result;
+        const Color reflected = reflected_color(comps, remaining);
+        const Color refracted = refracted_color(comps, remaining);
+        if (comps.object->material.reflective > 0.f && comps.object->material.transparency > 0.f) {
+            const float reflectance = intersections::schlick(comps);
+            return surface + reflected * reflectance + refracted * (1 - reflectance);
+        }
+        return surface + reflected + refracted;
     }
 
     Color World::color_at(const rays::Ray &r, const size_t& remaining) const {
         const auto xs = intersect(r);
         if (const auto& h = hit(xs)) {
-            return shade_hit(h->pre_compute(r), remaining);
+            return shade_hit(h->pre_compute(r, xs), remaining);
         }
         return color(0, 0, 0);
     }
@@ -70,7 +74,7 @@ namespace rtc::world {
 
         const Ray r{p, direction};
         const auto xs = intersect(r);
-        if (const auto& h = hit(xs); h && h->t < distance) {
+        if (const auto& h = hit(xs); h && h->object->material.casts_shadows && h->t < distance) {
             return true;
         }
         return false;
@@ -85,5 +89,25 @@ namespace rtc::world {
         const Color c = color_at(reflect_ray, remaining - 1);
 
         return c * comps.object->material.reflective;
+    }
+
+    Color World::refracted_color(const intersections::Components &comps, const size_t &remaining) const {
+        if (remaining == 0 || comps.object->material.transparency < EPSILON) {
+            return color(0, 0, 0);
+        }
+
+        const float n_ratio = comps.n1 / comps.n2;
+        const float cos_i = dot(comps.eye_v, comps.normal_v);
+        const float sin2_t = n_ratio * n_ratio * (1 - cos_i * cos_i);
+
+        if (sin2_t > 1) {
+            return color(0, 0, 0);
+        }
+
+        const float cos_t = std::sqrtf(1.f - sin2_t);
+        const Vector direction = comps.normal_v * (n_ratio * cos_i - cos_t) - comps.eye_v * n_ratio;
+        const Ray refract_ray{comps.under_point, direction};
+
+        return color_at(refract_ray, remaining - 1) * comps.object->material.transparency;
     }
 }

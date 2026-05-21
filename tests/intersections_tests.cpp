@@ -235,3 +235,141 @@ SCENARIO("Precomputing the reflection vector") {
         }
     }
 }
+
+SCENARIO("Finding n1 and n2 at various intersections") {
+    GIVEN("A <- Sphere::glass(), A.transform <- scaling(2, 2, 2), A.material.refractive_index <- 1.5,"
+          "B <- Sphere::glass(), B.transform <- translation(0, 0, -0.25), B.material.refractive_index <- 2.0,"
+          "C <- Sphere::glass(), C.transform <- translation(0, 0, 0.25), C.material.refractive_index <- 2.5,"
+          "r <- Ray(point(0, 0, -4), vector(0, 0, 1)), xs <- intersections({2, A}, {2.75, B}, {3.25, C}, {4.75, B}, {5.25, C}, {6, A}") {
+        Sphere A = Sphere::glass();
+        A.transform = scaling(2, 2, 2);
+        A.material.refractive_index = 1.5f;
+        Sphere B = Sphere::glass();
+        B.transform = translation(0, 0, -0.25f);
+        B.material.refractive_index = 2.0f;
+        Sphere C = Sphere::glass();
+        C.transform = translation(0, 0, 0.25f);
+        C.material.refractive_index = 2.5f;
+        const Ray r{point(0, 0, -4), vector(0, 0, 1)};
+        const auto xs = intersections({{2.f, &A}, {2.75, &B}, {3.25, &C}, {4.75, &B}, {5.25, &C}, {6, &A}});
+        WHEN("comps <- xs[0].pre_compute(r)") {
+            const Components comps = xs[0].pre_compute(r, xs);
+            THEN("comps.n1 = 1.0") {
+                REQUIRE(comps.n1 == 1.0f);
+            }
+            AND_THEN("comps.n2 = 1.5") {
+                REQUIRE(comps.n2 == 1.5f);
+            }
+        }
+        AND_WHEN("comps <- xs[1].pre_compute(r)") {
+            const Components comps = xs[1].pre_compute(r, xs);
+            THEN("comps.n1 = 1.5") {
+                REQUIRE(comps.n1 == 1.5f);
+            }
+            AND_THEN("comps.n2 = 2.0") {
+                REQUIRE(comps.n2 == 2.0f);
+            }
+        }
+        AND_WHEN("comps <- xs[2].pre_compute(r)") {
+            const Components comps = xs[2].pre_compute(r, xs);
+            THEN("comps.n1 = 2.0") {
+                REQUIRE(comps.n1 == 2.0f);
+            }
+            AND_THEN("comps.n2 = 2.5") {
+                REQUIRE(comps.n2 == 2.5f);
+            }
+        }
+        AND_WHEN("comps <- xs[3].pre_compute(r)") {
+            const Components comps = xs[3].pre_compute(r, xs);
+            THEN("comps.n1 = 2.5") {
+                REQUIRE(comps.n1 == 2.5f);
+            }
+            AND_THEN("comps.n2 = 2.5") {
+                REQUIRE(comps.n2 == 2.5f);
+            }
+        }
+        AND_WHEN("comps <- xs[4].pre_compute(r)") {
+            const Components comps = xs[4].pre_compute(r, xs);
+            THEN("comps.n1 = 2.5") {
+                REQUIRE(comps.n1 == 2.5f);
+            }
+            AND_THEN("comps.n2 = 1.5") {
+                REQUIRE(comps.n2 == 1.5f);
+            }
+        }
+        AND_WHEN("comps <- xs[5].pre_compute(r)") {
+            const Components comps = xs[5].pre_compute(r, xs);
+            THEN("comps.n1 = 1.5") {
+                REQUIRE(comps.n1 == 1.5f);
+            }
+            AND_THEN("comps.n2 = 1.0") {
+                REQUIRE(comps.n2 == 1.0f);
+            }
+        }
+    }
+}
+
+SCENARIO("The under point is offset below the surface") {
+    GIVEN("r <- ray(point(0, 0, -5), vector(0, 0, 1)), shape <- Sphere::glass(), shape.transform <- translation(0, 0, 1),"
+          "i <- intersection(5, shape), xs <- intersections(i)") {
+        const Ray r{point(0, 0, -5), vector(0, 0, 1)};
+        Sphere shape = Sphere::glass();
+        shape.transform = translation(0, 0, 1);
+        const Intersection i{5, &shape};
+        const auto xs = intersections({i});
+        WHEN("comps <- i.pre_compute(r, xs)") {
+            const Components comps = i.pre_compute(r, xs);
+            THEN("comps.under_point.z > EPSILON / 2") {
+                REQUIRE(comps.under_point.z > EPSILON / 2.f);
+            }
+            AND_THEN("comps.point.z < comps.under_point.z") {
+                REQUIRE(comps.point.z < comps.under_point.z);
+            }
+        }
+    }
+}
+
+SCENARIO("The Schlick approximation under total internal reflection") {
+    GIVEN("shape <- Sphere::glass(), r <- ray(point(0, 0, sqrt(2)/2), vector(0, 1, 0)), xs <- intersections({{-sqrt(2)/2, shape}, {sqrt(2)/2, shape}})") {
+        const Sphere shape = Sphere::glass();
+        const Ray r{point(0, 0, std::sqrtf(2.f)/2.f), vector(0, 1, 0)};
+        const auto xs = intersections({{-std::sqrtf(2.f)/2.f, &shape}, {std::sqrtf(2.f)/2.f, &shape}});
+        WHEN("comps <- xs[1].pre_compute(r, xs), reflectance <- schlick(comps)") {
+            const Components comps = xs[1].pre_compute(r, xs);
+            const auto reflectance = schlick(comps);
+            THEN("reflectance = 1.0") {
+                REQUIRE((reflectance - 1.0) < EPSILON);
+            }
+        }
+    }
+}
+
+SCENARIO("The schlick approximation with a perpendicular viewing angle") {
+    GIVEN("shape <- Sphere::glass(), r <- ray(point(0, 0, 0), vector(0, 1, 0)), xs <- intersections({{-1, shape}, {1, shape}})") {
+        const Sphere shape = Sphere::glass();
+        const Ray r{point(0, 0, 0), vector(0, 1, 0)};
+        const auto xs = intersections({{-1, &shape}, {1, &shape}});
+        WHEN("comps <- xs[1].pre_compute(r, xs), reflectance <- schlick(comps)") {
+            const Components comps = xs[1].pre_compute(r, xs);
+            const float reflectance = schlick(comps);
+            THEN("reflectance = 0.04") {
+                REQUIRE((reflectance - 0.04f) < EPSILON);
+            }
+        }
+    }
+}
+
+SCENARIO("The schlick approximation with small angles and n2 > n1") {
+    GIVEN("shape <- Sphere::glass(), r <- ray(point(0, 0.99, -2), vector(0, 0, 1)), xs <- intersections({{1.8589, shape}})") {
+        const Sphere shape = Sphere::glass();
+        const Ray r{point(0, 0.99, -2), vector(0, 0, 1)};
+        const auto xs = intersections({{1.8589, &shape}});
+        WHEN("comps <- xs[0].pre_compute(r, xs), reflectance <- schlick(comps)") {
+            const Components comps = xs[0].pre_compute(r, xs);
+            const float reflectance = schlick(comps);
+            THEN("reflectance = 0.48873") {
+                REQUIRE((reflectance - 0.48873f) < EPSILON);
+            }
+        }
+    }
+}

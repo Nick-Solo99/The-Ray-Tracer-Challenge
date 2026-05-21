@@ -55,6 +55,8 @@ add_library(rtc_core
         src/noise/PerlinNoise.h
         src/patterns/perturbed/PerturbedPattern.cpp
         src/patterns/perturbed/PerturbedPattern.h
+        src/patterns/test/TestPattern.cpp
+        src/patterns/test/TestPattern.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -122,3 +124,5 @@ add_executable(NestedPatternExamples exercises/NestedPatternExamples.cpp)
 target_link_libraries(NestedPatternExamples PRIVATE rtc_core)
 add_executable(FirstReflection exercises/FirstReflection.cpp)
 target_link_libraries(FirstReflection PRIVATE rtc_core)
+add_executable(FirstRefraction exercises/FirstRefraction.cpp)
+target_link_libraries(FirstRefraction PRIVATE rtc_core)
