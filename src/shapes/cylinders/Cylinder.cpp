@@ -24,6 +24,7 @@ namespace rtc::shapes::cylinders {
     }
 
     Vector Cylinder::normal_at(const Point &point) const {
-        return vector(0, 0, 0);
+        const Point obj_point = transform.inverse() * point;
+        return vector(obj_point.x, 0, obj_point.z);
     }
 }

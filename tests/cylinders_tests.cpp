@@ -72,3 +72,21 @@ SCENARIO("A ray strikes a cylinder") {
         }
     }
 }
+
+SCENARIO("Normal vector on a cylinder") {
+    auto [origin, normal] = GENERATE(table<Point, Vector>({
+        {point(1, 0, 0), vector(1, 0, 0)},
+        {point(0, 5, -1), vector(0, 0, -1)},
+        {point(0, -2, 1), vector(0, 0, 1)},
+        {point(-1, 1, 0), vector(-1, 0, 0)}
+    }));
+    GIVEN("cyl <- Cylinder()") {
+        const Cylinder cyl{};
+        WHEN("n <- cyl.normal_at(<origin>)") {
+            const Vector n = cyl.normal_at(origin);
+            THEN("n = <normal>") {
+                REQUIRE(n == normal);
+            }
+        }
+    }
+}
