@@ -8,18 +8,9 @@
 #include <rays/Ray.h>
 #include <typeinfo>
 
+using namespace rtc::tuples;
 
 namespace rtc::shapes::spheres {
-    using namespace rtc::tuples;
-
-    bool Sphere::operator==(const Shape &other) const {
-        if (typeid(*this) != typeid(other) || material != other.material || transform != other.transform) {
-            return false;
-        }
-
-        return true;
-    }
-
     std::vector<intersections::Intersection> Sphere::intersect(const Ray& ray) const {
         const Ray ray2 = ray.transform(transform.inverse());
 

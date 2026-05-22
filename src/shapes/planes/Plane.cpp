@@ -11,13 +11,6 @@ using namespace rtc::constants;
 
 
 namespace rtc::shapes::planes {
-    bool Plane::operator==(const Shape &other) const {
-        if (typeid(*this) != typeid(other) || material != other.material || transform != other.transform) {
-            return false;
-        }
-        return true;
-    }
-
     std::vector<intersections::Intersection> Plane::intersect(const Ray &ray) const {
         const Ray ray2 = ray.transform(transform.inverse());
         std::vector<intersections::Intersection> intersections;
