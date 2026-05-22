@@ -57,6 +57,8 @@ add_library(rtc_core
         src/patterns/perturbed/PerturbedPattern.h
         src/patterns/test/TestPattern.cpp
         src/patterns/test/TestPattern.h
+        src/shapes/cubes/Cube.cpp
+        src/shapes/cubes/Cube.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -76,6 +78,7 @@ add_executable(tests
         tests/camera_tests.cpp
         tests/plane_tests.cpp
         tests/patterns_tests.cpp
+        tests/cubes_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core
@@ -126,3 +129,5 @@ add_executable(FirstReflection exercises/FirstReflection.cpp)
 target_link_libraries(FirstReflection PRIVATE rtc_core)
 add_executable(FirstRefraction exercises/FirstRefraction.cpp)
 target_link_libraries(FirstRefraction PRIVATE rtc_core)
+add_executable(FirstCubes exercises/FirstCubes.cpp)
+target_link_libraries(FirstCubes PRIVATE rtc_core)
