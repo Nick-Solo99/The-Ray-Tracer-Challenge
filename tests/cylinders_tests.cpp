@@ -90,3 +90,39 @@ SCENARIO("Normal vector on a cylinder") {
         }
     }
 }
+
+SCENARIO("The default minimum and maximum for a cylinder") {
+    GIVEN("cyl <- cylinder()") {
+        const Cylinder cyl{};
+        THEN("cyl.minimum = -INFINITY") {
+            REQUIRE(cyl.minimum == -INFINITY);
+        }
+        AND_THEN("cyl.maximum = INFINITY") {
+            REQUIRE(cyl.maximum == INFINITY);
+        }
+    }
+}
+
+SCENARIO("Intersecting a constrained cylinder") {
+    auto [origin, direction, count] = GENERATE(table<Point, Vector, float>({
+        {point(0, 1.5, 0), vector(0.1, 1, 0), 0},
+        {point(0, 3, -5), vector(0, 0, 1), 0},
+        {point(0, 0, -5), vector(0, 0, 1), 0},
+        {point(0, 2, -5), vector(0, 0, 1), 0},
+        {point(0, 1, -5), vector(0, 0, 1), 0},
+        {point(0, 1.5, -2), vector(0, 0, 1), 2}
+    }));
+    GIVEN("cyl <- cylinder(), cyl.minimum = 1, cyl.maximum = 2, dir <- normalize(<direction>), r <- ray(<origin>, dir)") {
+        Cylinder cyl{};
+        cyl.minimum = 1;
+        cyl.maximum = 2;
+        const Vector dir = normalize(direction);
+        const Ray r{origin, dir};
+        WHEN("xs <- cyl.intersect(r)") {
+            const auto xs = cyl.intersect(r);
+            THEN("xs.count == <count>") {
+                REQUIRE(xs.size() == count);
+            }
+        }
+    }
+}

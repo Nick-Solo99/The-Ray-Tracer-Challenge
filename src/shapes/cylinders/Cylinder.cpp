@@ -18,9 +18,16 @@ namespace rtc::shapes::cylinders {
         const float c = std::powf(ray2.origin.x, 2) + std::powf(ray2.origin.z, 2) - 1;
         const float disc = std::powf(b, 2) - 4 * a * c;
         if (disc < 0) return {};
-        const float t0 = (-b - std::sqrtf(disc)) / (2 * a);
-        const float t1 = (-b + std::sqrtf(disc)) / (2 * a);
-        return {{t0, this}, {t1, this}};
+        float t0 = (-b - std::sqrtf(disc)) / (2 * a);
+        float t1 = (-b + std::sqrtf(disc)) / (2 * a);
+        if (t0 > t1) std::swap(t0, t1);
+        std::vector<intersections::Intersection> xs;
+
+        const float y0 = ray2.origin.y + t0 * ray2.direction.y;
+        if (minimum < y0 && y0 < maximum) xs.push_back({t0, this});
+        const float y1 = ray2.origin.y + t1 * ray2.direction.y;
+        if (minimum < y1 && y1 < maximum) xs.push_back({t1, this});
+        return xs;
     }
 
     Vector Cylinder::normal_at(const Point &point) const {

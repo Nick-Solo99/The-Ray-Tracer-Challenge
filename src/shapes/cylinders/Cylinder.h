@@ -10,6 +10,8 @@
 namespace rtc::shapes::cylinders {
     class Cylinder final : public Shape {
     public:
+        float minimum = -INFINITY;
+        float maximum = INFINITY;
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const Ray& ray) const override;
         [[nodiscard]] Vector normal_at(const Point& point) const override;
     };
