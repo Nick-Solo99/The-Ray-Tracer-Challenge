@@ -13,7 +13,7 @@ namespace rtc::shapes::cylinders {
     bool Cylinder::check_cap(const Ray &ray, const float &t) {
         const float x = ray.origin.x + t * ray.direction.x;
         const float z = ray.origin.z + t * ray.direction.z;
-        return (x * x + z * z) - 1 <= EPSILON;
+        return (x * x + z * z) - 1 < EPSILON;
     }
 
     void Cylinder::intersect_caps(const Ray &ray, std::vector<intersections::Intersection> &xs) const {

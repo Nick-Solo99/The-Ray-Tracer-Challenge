@@ -61,6 +61,8 @@ add_library(rtc_core
         src/shapes/cubes/Cube.h
         src/shapes/cylinders/Cylinder.cpp
         src/shapes/cylinders/Cylinder.h
+        src/shapes/Cones/Cone.cpp
+        src/shapes/Cones/Cone.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -82,6 +84,7 @@ add_executable(tests
         tests/patterns_tests.cpp
         tests/cubes_tests.cpp
         tests/cylinders_tests.cpp
+        tests/cones_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core
