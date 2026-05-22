@@ -31,7 +31,7 @@ int main() {
     const auto start = std::chrono::high_resolution_clock::now();
 
     World w{};
-    w.lights.push_back(std::make_unique<PointLight>(point(-3, 3, -3), color(1, 1, 1)));
+    w.lights.push_back(std::make_unique<PointLight>(point(-10, 10, -10), color(1, 1, 1)));
 
     CheckerPattern checker_pattern{color(0, 0, 0), color(1, 1, 1)};
 
@@ -43,23 +43,35 @@ int main() {
 
     Plane glass{};
     glass.transform = Transform().rotate_x(std::numbers::pi_v<float> / 2.f).rotate_y(std::numbers::pi_v<float> / 2.f);
-    glass.material.reflective = 0.9;
+    glass.material.reflective = 1;
     glass.material.transparency = 0.9;
+    glass.material.diffuse = 0.1f;
+    glass.material.ambient = 0.1f;
     glass.material.casts_shadows = false;
+    glass.material.color = color(0, 0.3, 0);
     w.objects.push_back(std::make_unique<Plane>(glass));
 
-    Sphere ball_a{};
-    ball_a.material.color = color(1, 0, 0);
+    Plane mirror{};
+    mirror.transform = Transform().rotate_x(std::numbers::pi_v<float> / 2.f).translate(0, 0, 5);
+    mirror.material.reflective = 1;
+    mirror.material.diffuse = 0.2f;
+    mirror.material.ambient = 0.2f;
+    mirror.material.color = color(0, 0, 0);
+    w.objects.push_back(std::make_unique<Plane>(mirror));
+
+    Sphere ball_a = Sphere::glass();
+    ball_a.material.color = color(0.1, 0, 0);
     ball_a.transform = translation(-2, 0, 2);
+    ball_a.material.reflective = 2.0;
     w.objects.push_back(std::make_unique<Sphere>(ball_a));
 
-    Sphere ball_b{};
-    ball_b.material.color = color(0, 0, 1);
+    Sphere ball_b = Sphere::glass();
+    ball_b.material.color = color(0, 0, 0.1);
     ball_b.transform = translation(2, 0, 2);
     w.objects.push_back(std::make_unique<Sphere>(ball_b));
 
     Camera cam{SCREEN_WIDTH, SCREEN_HEIGHT, std::numbers::pi_v<float> /2.f};
-    const Point from = point(-1, 2, -3);
+    const Point from = point(-2, 2, -3);
     const Point to = point(0, 1, 0);
     const Vector up = vector(0, 1, 0);
     cam.transform = view_transform(from, to, up);
