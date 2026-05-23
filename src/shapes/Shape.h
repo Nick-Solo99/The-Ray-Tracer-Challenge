@@ -33,7 +33,7 @@ namespace rtc::shapes {
 
         void set_transform(const matrices::Matrix& t) { transform = t; }
 
-        bool virtual operator==(const Shape& other) const = 0;
+        bool virtual operator==(const Shape& other) const;
 
         [[nodiscard]] virtual std::vector<intersections::Intersection> intersect(const Ray& ray) const = 0;
         [[nodiscard]] virtual Vector normal_at(const Point& p) const = 0;

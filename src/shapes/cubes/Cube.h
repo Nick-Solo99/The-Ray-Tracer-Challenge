@@ -12,7 +12,6 @@ namespace rtc::shapes::cubes {
     class Cube final : public Shape{
         [[nodiscard]] std::array<float, 2> check_axis(const float& origin, const float& direction) const;
     public:
-        bool operator==(const Shape& other) const override;
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const rays::Ray& ray) const override;
         [[nodiscard]] Vector normal_at(const Point &p) const override;
     };

@@ -10,9 +10,6 @@
 namespace rtc::shapes::spheres {
     class Sphere final : public Shape {
         public:
-
-        bool operator==(const Shape& other) const override;
-
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const Ray& ray) const override;
         [[nodiscard]] tuples::Vector normal_at(const tuples::Point& p) const override;
 

@@ -29,10 +29,6 @@ namespace rtc::shapes::cubes {
         return { tmin, tmax };
     }
 
-    bool Cube::operator==(const Shape &other) const {
-        return typeid(*this) == typeid(other) && transform == other.transform && material == other.material;
-    }
-
     std::vector<intersections::Intersection> Cube::intersect(const rays::Ray &ray) const {
         const Ray ray2 = ray.transform(transform.inverse());
         const auto [xtmin, xtmax] = check_axis(ray2.origin.x, ray2.direction.x);
