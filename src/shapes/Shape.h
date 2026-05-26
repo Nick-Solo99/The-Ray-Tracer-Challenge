@@ -26,17 +26,27 @@ namespace rtc::shapes {
     using Ray = rays::Ray;
     using Material = materials::Material;
 
+    struct Bounds {
+        Point min;
+        Point max;
+    };
+
     class Shape {
         public:
         Material material;
-        matrices::Matrix transform = matrices::Matrix::identity();
+        Matrix transform = Matrix::identity();
+        Shape* parent = nullptr;
 
-        void set_transform(const matrices::Matrix& t) { transform = t; }
+        void set_transform(const Matrix& t) { transform = t; }
+        [[nodiscard]] Point world_to_obj(Point p) const;
+        [[nodiscard]] Vector normal_to_world(Vector normal) const;
 
         bool virtual operator==(const Shape& other) const;
 
         [[nodiscard]] virtual std::vector<intersections::Intersection> intersect(const Ray& ray) const = 0;
-        [[nodiscard]] virtual Vector normal_at(const Point& p) const = 0;
+        [[nodiscard]] virtual Vector local_normal_at(const Point& p) const = 0;
+        [[nodiscard]] Vector normal_at(const Point& p) const;
+        [[nodiscard]] virtual Bounds bounds() const = 0;
         virtual ~Shape() = default;
     };
 }

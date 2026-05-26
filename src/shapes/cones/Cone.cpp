@@ -55,13 +55,16 @@ namespace rtc::shapes::cones {
         return xs;
     }
 
-    Vector Cone::normal_at(const Point &p) const {
-        const Point obj_point = transform.inverse() * p;
-        const float dist = std::powf(obj_point.x, 2) + std::powf(obj_point.z, 2);
-        if (dist < 1 && obj_point.y >= maximum - EPSILON) return vector(0, 1, 0);
-        if (dist < 1 && obj_point.y <= minimum + EPSILON) return vector(0, -1, 0);
-        const float y = std::hypotf(obj_point.x, obj_point.z);
-        return vector(obj_point.x, obj_point.y > 0 ? -y : y, obj_point.z);
+    Vector Cone::local_normal_at(const Point &p) const {
+        const float dist = std::powf(p.x, 2) + std::powf(p.z, 2);
+        if (dist < 1 && p.y >= maximum - EPSILON) return vector(0, 1, 0);
+        if (dist < 1 && p.y <= minimum + EPSILON) return vector(0, -1, 0);
+        const float y = std::hypotf(p.x, p.z);
+        return vector(p.x, p.y > 0 ? -y : y, p.z);
     }
 
+    Bounds Cone::bounds() const {
+        const float radius = std::max(std::abs(minimum), std::abs(maximum));
+        return {{-radius, minimum, -radius}, {radius, maximum, radius}};
+    }
 }

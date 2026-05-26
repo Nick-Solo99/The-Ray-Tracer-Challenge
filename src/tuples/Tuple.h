@@ -4,6 +4,7 @@
 
 #ifndef RTC_TUPLE_H
 #define RTC_TUPLE_H
+#include <iostream>
 
 
 namespace rtc::tuples {
@@ -20,6 +21,7 @@ namespace rtc::tuples {
 
         bool operator==(const Tuple& t) const;
         bool operator!=(const Tuple& t) const;
+        bool operator<(const Tuple& t) const;
         Tuple operator+(const Tuple& t) const;
         Tuple operator-(const Tuple& t) const;
         Tuple operator-() const;
@@ -36,6 +38,7 @@ namespace rtc::tuples {
     static_assert(sizeof(Tuple) == sizeof(float) * 4, "Tuple size mismatch");
 
     inline Tuple operator*(const float s, const Tuple& t) { return t * s; }
+    std::ostream& operator<<(std::ostream& os, const Tuple& t);
 
     Tuple tuple(float x, float y, float z, float w);
     Tuple point(float x, float y, float z);

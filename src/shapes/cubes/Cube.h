@@ -13,7 +13,8 @@ namespace rtc::shapes::cubes {
         [[nodiscard]] std::array<float, 2> check_axis(const float& origin, const float& direction) const;
     public:
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const rays::Ray& ray) const override;
-        [[nodiscard]] Vector normal_at(const Point &p) const override;
+        [[nodiscard]] Vector local_normal_at(const Point &p) const override;
+        [[nodiscard]] Bounds bounds() const override;
     };
 }
 
