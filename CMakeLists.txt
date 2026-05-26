@@ -65,6 +65,8 @@ add_library(rtc_core
         src/shapes/Cones/Cone.h
         src/shapes/groups/Group.cpp
         src/shapes/groups/Group.h
+        src/shapes/triangles/Triangle.cpp
+        src/shapes/triangles/Triangle.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -88,6 +90,7 @@ add_executable(tests
         tests/cylinders_tests.cpp
         tests/cones_tests.cpp
         tests/groups_tests.cpp
+        tests/triangles_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core
