@@ -9,7 +9,7 @@
 
 namespace rtc::shapes::groups {
     class Group final : public Shape {
-        std::vector<std::unique_ptr<Shape>> shapes;
+        std::vector<std::unique_ptr<Shape>> shapes{};
         [[nodiscard]] std::array<float, 2> check_axis(const float& origin, const float& direction, const float& min, const float& max) const;
 
         public:
