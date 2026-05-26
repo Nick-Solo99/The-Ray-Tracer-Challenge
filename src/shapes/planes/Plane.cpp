@@ -25,11 +25,11 @@ namespace rtc::shapes::planes {
         return intersections;
     }
 
-    Vector Plane::normal_at(const Point &p) const {
-        const Point obj_point = transform.inverse() * p;
-        const Vector obj_norm = vector(0, 1, 0);
-        Vector world_norm = transform.inverse().transpose() * obj_norm;
-        world_norm.w = 0;
-        return world_norm;
+    Vector Plane::local_normal_at(const Point &p) const {
+        return vector(0, 1, 0);
+    }
+
+    Bounds Plane::bounds() const {
+        return {{-INFINITY, 0, -INFINITY}, {INFINITY, 0, INFINITY}};
     }
 }

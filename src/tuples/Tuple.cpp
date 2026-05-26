@@ -106,6 +106,10 @@ namespace rtc::tuples {
     }
 
 
+    std::ostream & operator<<(std::ostream &os, const Tuple &t) {
+        return os << "(" << t.x << ", " << t.y << ", " << t.z << ", " << t.w << ")";
+    }
+
     Tuple tuple(const float x, const float y, const float z, const float w) {
         return {x, y, z, w};
     }

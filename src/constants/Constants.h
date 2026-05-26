@@ -6,7 +6,7 @@
 #define RTC_CONSTANTS_H
 
 namespace rtc::constants {
-    constexpr float EPSILON = 0.00005f;
+    constexpr float EPSILON = 0.0001f;
     constexpr size_t RECURSION_DEPTH = 5;
 }
 

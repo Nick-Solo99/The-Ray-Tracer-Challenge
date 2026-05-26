@@ -49,11 +49,14 @@ namespace rtc::shapes::cylinders {
         return xs;
     }
 
-    Vector Cylinder::normal_at(const Point &point) const {
-        const Point obj_point = transform.inverse() * point;
-        const float dist = std::powf(obj_point.x, 2) + std::powf(obj_point.z, 2);
-        if (dist < 1 && obj_point.y >= maximum - EPSILON) return vector(0, 1, 0);
-        if (dist < 1 && obj_point.y <= minimum + EPSILON) return vector(0, -1, 0);
-        return vector(obj_point.x, 0, obj_point.z);
+    Vector Cylinder::local_normal_at(const Point &point) const {
+        const float dist = std::powf(point.x, 2) + std::powf(point.z, 2);
+        if (dist < 1 && point.y >= maximum - EPSILON) return vector(0, 1, 0);
+        if (dist < 1 && point.y <= minimum + EPSILON) return vector(0, -1, 0);
+        return vector(point.x, 0, point.z);
+    }
+
+    Bounds Cylinder::bounds() const {
+        return {{-1, minimum, -1}, {1, maximum, 1}};
     }
 }

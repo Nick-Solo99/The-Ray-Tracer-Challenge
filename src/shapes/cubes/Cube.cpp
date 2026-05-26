@@ -47,21 +47,19 @@ namespace rtc::shapes::cubes {
         return {{tmin, this}, {tmax, this}};
     }
 
-    Vector Cube::normal_at(const Point &p) const {
-        const Point obj_point = transform.inverse() * p;
-        const float max_c = std::max({std::fabs(obj_point.x), std::fabs(obj_point.y), std::fabs(obj_point.z)});
-        Vector obj_normal;
-        if (max_c == std::fabs(obj_point.x)) {
-            obj_normal = vector(obj_point.x, 0, 0);
-        }else if (max_c == std::fabs(obj_point.y)) {
-            obj_normal = vector(0, obj_point.y, 0);
-        } else {
-            obj_normal = vector(0, 0, obj_point.z);
+    Vector Cube::local_normal_at(const Point &p) const {
+        const float max_c = std::max({std::fabs(p.x), std::fabs(p.y), std::fabs(p.z)});
+        if (max_c == std::fabs(p.x)) {
+            return vector(p.x, 0, 0);
         }
+        if (max_c == std::fabs(p.y)) {
+            return vector(0, p.y, 0);
+        }
+        return vector(0, 0, p.z);
+    }
 
-        Vector world_normal = transform.inverse().transpose() * obj_normal;
-        world_normal.w = 0;
-        return normalize(world_normal);
+    Bounds Cube::bounds() const {
+        return {{-1, -1, -1}, {1, 1, 1}};
     }
 }
 
