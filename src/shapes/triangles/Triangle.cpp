@@ -31,7 +31,18 @@ namespace rtc::shapes::triangles {
         return {{t, this}};
     }
 
-    Bounds Triangle::bounds() const {
-        return {};
+    const Bounds& Triangle::bounds() const {
+        if (cached_bounds) {
+            return *cached_bounds;
+        }
+        Point min = point(0, 0, 0), max = point(0, 0, 0);
+        min.x = std::min({p1.x, p2.x, p3.x});
+        min.y = std::min({p1.y, p2.y, p3.y});
+        min.z = std::min({p1.z, p2.z, p3.z});
+        max.x = std::max({p1.x, p2.x, p3.x});
+        max.y = std::max({p1.y, p2.y, p3.y});
+        max.z = std::max({p1.z, p2.z, p3.z});
+        cached_bounds = Bounds{min, max};
+        return *cached_bounds;
     }
 }

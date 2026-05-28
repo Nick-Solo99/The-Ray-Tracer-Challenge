@@ -18,7 +18,7 @@ namespace rtc::shapes::cylinders {
         bool closed = false;
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const Ray& ray) const override;
         [[nodiscard]] Vector local_normal_at(const Point& point) const override;
-        [[nodiscard]] Bounds bounds() const override;
+        [[nodiscard]] const Bounds& bounds() const override;
     };
 
 

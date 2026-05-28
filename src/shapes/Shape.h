@@ -7,6 +7,7 @@
 #include <vector>
 #include <materials/Material.h>
 #include <matrices/Matrix.h>
+#include <optional>
 
 namespace rtc::rays {
     struct Ray;
@@ -36,6 +37,7 @@ namespace rtc::shapes {
         Material material;
         Matrix transform = Matrix::identity();
         Shape* parent = nullptr;
+        mutable std::optional<Bounds> cached_bounds;
 
         void set_transform(const Matrix& t) { transform = t; }
         [[nodiscard]] Point world_to_obj(Point p) const;
@@ -46,7 +48,7 @@ namespace rtc::shapes {
         [[nodiscard]] virtual std::vector<intersections::Intersection> intersect(const Ray& ray) const = 0;
         [[nodiscard]] virtual Vector local_normal_at(const Point& p) const = 0;
         [[nodiscard]] Vector normal_at(const Point& p) const;
-        [[nodiscard]] virtual Bounds bounds() const = 0;
+        [[nodiscard]] virtual const Bounds& bounds() const = 0;
         virtual ~Shape() = default;
     };
 }

@@ -12,7 +12,7 @@ namespace rtc::shapes::planes {
         public:
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const Ray& ray) const override;
         [[nodiscard]] Vector local_normal_at(const Point& p) const override;
-        [[nodiscard]] Bounds bounds() const override;
+        [[nodiscard]] const Bounds& bounds() const override;
     };
 }
 

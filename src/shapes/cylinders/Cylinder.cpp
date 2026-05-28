@@ -56,7 +56,11 @@ namespace rtc::shapes::cylinders {
         return vector(point.x, 0, point.z);
     }
 
-    Bounds Cylinder::bounds() const {
-        return {{-1, minimum, -1}, {1, maximum, 1}};
+   const Bounds& Cylinder::bounds() const {
+        if (cached_bounds) {
+            return *cached_bounds;
+        }
+        cached_bounds = {{-1, minimum, -1}, {1, maximum, 1}};
+        return *cached_bounds;
     }
 }

@@ -58,8 +58,12 @@ namespace rtc::shapes::cubes {
         return vector(0, 0, p.z);
     }
 
-    Bounds Cube::bounds() const {
-        return {{-1, -1, -1}, {1, 1, 1}};
+    const Bounds& Cube::bounds() const {
+        if (cached_bounds) {
+            return *cached_bounds;
+        }
+        cached_bounds = {{-1, -1, -1}, {1, 1, 1}};
+        return *cached_bounds;
     }
 }
 

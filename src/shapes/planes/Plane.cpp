@@ -29,7 +29,11 @@ namespace rtc::shapes::planes {
         return vector(0, 1, 0);
     }
 
-    Bounds Plane::bounds() const {
-        return {{-INFINITY, 0, -INFINITY}, {INFINITY, 0, INFINITY}};
+    const Bounds& Plane::bounds() const {
+        if (cached_bounds) {
+            return *cached_bounds;
+        }
+        cached_bounds = {{-INFINITY, 0, -INFINITY}, {INFINITY, 0, INFINITY}};
+        return *cached_bounds;
     }
 }

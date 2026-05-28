@@ -67,6 +67,9 @@ add_library(rtc_core
         src/shapes/groups/Group.h
         src/shapes/triangles/Triangle.cpp
         src/shapes/triangles/Triangle.h
+        src/parsers/Parsers.cpp
+        src/parsers/Parsers.h
+        src/scene/Scene.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -91,6 +94,7 @@ add_executable(tests
         tests/cones_tests.cpp
         tests/groups_tests.cpp
         tests/triangles_tests.cpp
+        tests/obj_parser_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core
@@ -147,3 +151,7 @@ add_executable(CoverImage exercises/CoverImage.cpp)
 target_link_libraries(CoverImage PRIVATE rtc_core)
 add_executable(FirstGroup exercises/FirstGroup.cpp)
 target_link_libraries(FirstGroup PRIVATE rtc_core)
+add_executable(FirstTriangles exercises/FirstTriangles.cpp)
+target_link_libraries(FirstTriangles PRIVATE rtc_core)
+add_executable(FirstObj exercises/FirstObj.cpp)
+target_link_libraries(FirstObj PRIVATE rtc_core)

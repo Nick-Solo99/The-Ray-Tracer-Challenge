@@ -63,8 +63,12 @@ namespace rtc::shapes::cones {
         return vector(p.x, p.y > 0 ? -y : y, p.z);
     }
 
-    Bounds Cone::bounds() const {
+    const Bounds& Cone::bounds() const {
+        if (cached_bounds) {
+            return *cached_bounds;
+        }
         const float radius = std::max(std::abs(minimum), std::abs(maximum));
-        return {{-radius, minimum, -radius}, {radius, maximum, radius}};
+        cached_bounds = {{-radius, minimum, -radius}, {radius, maximum, radius}};
+        return *cached_bounds;
     }
 }

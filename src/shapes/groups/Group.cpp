@@ -27,25 +27,28 @@ namespace rtc::shapes::groups {
         return { tmin, tmax };
     }
 
-    std::vector<intersections::Intersection> Group::intersect(const Ray &ray) const {
-        const Ray ray2 = ray.transform(transform.inverse());
-        const auto [min, max] = Group::bounds();
-        const auto [xtmin, xtmax] = check_axis(ray2.origin.x, ray2.direction.x, min.x, max.x);
-        const auto [ytmin, ytmax] = check_axis(ray2.origin.y, ray2.direction.y, min.y, max.y);
+    bool Group::intersects_bounds(const Ray &r, const Bounds &b) const {
+        const auto& [min, max] = b;
+        const auto [xtmin, xtmax] = check_axis(r.origin.x, r.direction.x, min.x, max.x);
+        const auto [ytmin, ytmax] = check_axis(r.origin.y, r.direction.y, min.y, max.y);
         float tmin = std::max({xtmin, ytmin});
         float tmax = std::min({xtmax, ytmax});
-
-        if (tmin > tmax) return {};
-
-        const auto [ztmin, ztmax] = check_axis(ray2.origin.z, ray2.direction.z, min.z, max.z);
-
+        if (tmin > tmax) return false;
+        const auto [ztmin, ztmax] = check_axis(r.origin.z, r.direction.z, min.z, max.z);
         tmin = std::max({tmin, ztmin});
         tmax = std::min({tmax, ztmax});
-        if (tmin > tmax) return {};
+        return tmin <= tmax;
+    }
+
+    std::vector<intersections::Intersection> Group::intersect(const Ray &ray) const {
+        const Ray ray2 = ray.transform(transform.inverse());
+
+        if (!intersects_bounds(ray2, bounds())) return {};
 
         std::vector<intersections::Intersection> xs;
-        for (const auto& shape : shapes) {
-            const auto shape_xs = shape->intersect(ray2);
+        for (int i{}; i < shapes.size(); ++i) {
+            if (!intersects_bounds(ray2, child_bounds[i])) continue;
+            const auto shape_xs = shapes[i]->intersect(ray2);
             xs.insert(xs.end(), shape_xs.begin(), shape_xs.end());
         }
         if (!xs.empty()) std::sort(xs.begin(), xs.end());
@@ -56,12 +59,28 @@ namespace rtc::shapes::groups {
         return vector(0, 1, 0);
     }
 
-    Bounds Group::bounds() const {
+    const Bounds& Group::bounds() const {
+        if (cached_bounds) {
+            return *cached_bounds;
+        }
+        cache_bounds();
+        return *cached_bounds;
+    }
+
+    void Group::add_child(std::unique_ptr<Shape> shape) {
+        shape->parent = this;
+        shapes.push_back(std::move(shape));
+    }
+
+    void Group::cache_bounds() const {
+        child_bounds.clear();
+        child_bounds.reserve(shapes.size());
+
         Point group_min = point(INFINITY, INFINITY, INFINITY);
         Point group_max = point(-INFINITY, -INFINITY, -INFINITY);
 
         for (const auto& shape : shapes) {
-            auto[min, max] = shape->bounds();
+            const auto& [min, max] = shape->bounds();
 
             std::array corners = {
                 point(min.x, min.y, min.z),
@@ -74,27 +93,43 @@ namespace rtc::shapes::groups {
                 point(max.x, max.y, max.z)
             };
 
-            for (auto corner : corners) {
-                corner = shape->transform * corner;
+            Point new_min = point(INFINITY, INFINITY, INFINITY);
+            Point new_max = point(-INFINITY, -INFINITY, -INFINITY);
 
-                group_min.x = std::min(group_min.x, corner.x);
-                group_min.y = std::min(group_min.y, corner.y);
-                group_min.z = std::min(group_min.z, corner.z);
+            for (auto& c : corners) {
+                c = shape->transform * c;
 
-                group_max.x = std::max(group_max.x, corner.x);
-                group_max.y = std::max(group_max.y, corner.y);
-                group_max.z = std::max(group_max.z, corner.z);
+                new_min.x = std::min(new_min.x, c.x);
+                new_min.y = std::min(new_min.y, c.y);
+                new_min.z = std::min(new_min.z, c.z);
+
+                new_max.x = std::max(new_max.x, c.x);
+                new_max.y = std::max(new_max.y, c.y);
+                new_max.z = std::max(new_max.z, c.z);
             }
-        }
-        return Bounds(group_min, group_max);
-    }
+            child_bounds.emplace_back(new_min, new_max);
+            group_min.x = std::min(group_min.x, new_min.x);
+            group_min.y = std::min(group_min.y, new_min.y);
+            group_min.z = std::min(group_min.z, new_min.z);
 
-    void Group::add_child(std::unique_ptr<Shape> shape) {
-        shape->parent = this;
-        shapes.push_back(std::move(shape));
+            group_max.x = std::max(group_max.x, new_max.x);
+            group_max.y = std::max(group_max.y, new_max.y);
+            group_max.z = std::max(group_max.z, new_max.z);
+        }
+        cached_bounds = Bounds(group_min, group_max);
     }
 
     bool Group::contains(const Shape *shape) const {
         return std::ranges::any_of(shapes, [shape](const auto& ptr) {return ptr.get() == shape;});
+    }
+
+    bool Group::operator==(const Shape &shape) const {
+        if (!Shape::operator==(shape)) return false;
+        const auto* g = dynamic_cast<const Group*>(&shape);
+        if (!g || g->size() != size()) return false;
+        for (size_t i{}; i < size(); i++) {
+            if ((*this)[i] != (*g)[i]) return false;
+        }
+        return true;
     }
 }

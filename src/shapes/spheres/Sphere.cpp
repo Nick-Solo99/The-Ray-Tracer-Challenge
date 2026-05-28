@@ -37,8 +37,12 @@ namespace rtc::shapes::spheres {
         return p - point(0, 0, 0);
     }
 
-    Bounds Sphere::bounds() const {
-        return {{-1, -1, -1}, {1, 1, 1}};
+    const Bounds& Sphere::bounds() const {
+        if (cached_bounds) {
+            return *cached_bounds;
+        }
+        cached_bounds =  {{-1, -1, -1}, {1, 1, 1}};
+        return *cached_bounds;
     }
 
     Sphere Sphere::glass() {

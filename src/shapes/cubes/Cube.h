@@ -14,7 +14,7 @@ namespace rtc::shapes::cubes {
     public:
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const rays::Ray& ray) const override;
         [[nodiscard]] Vector local_normal_at(const Point &p) const override;
-        [[nodiscard]] Bounds bounds() const override;
+        [[nodiscard]] const Bounds& bounds() const override;
     };
 }
 
