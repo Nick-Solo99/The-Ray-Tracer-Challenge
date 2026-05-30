@@ -38,6 +38,7 @@ namespace rtc::intersections {
     struct Intersection {
         float t = 0.0f;
         const Shape* object = nullptr;
+        float u, v;
 
         bool operator==(const Intersection& other) const { return object == other.object && t == other.t; }
         bool operator!=(const Intersection& other) const { return !(*this == other); }

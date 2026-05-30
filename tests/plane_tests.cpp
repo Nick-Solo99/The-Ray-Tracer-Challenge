@@ -16,9 +16,9 @@ SCENARIO("The normal of a plane is constant everywhere") {
     GIVEN("p <- plane()") {
         const Plane p{};
         WHEN("n1 <- p.normal_at(point(0, 0, 0)), n2 <- p.normal_at(point(10, 0, -10)), n3 <- p.normal_at(point(-5, 0, 150))") {
-            const Vector n1 = p.normal_at(point(0, 0, 0));
-            const Vector n2 = p.normal_at(point(10, 0, -10));
-            const Vector n3 = p.normal_at(point(-5, 0, 150));
+            const Vector n1 = p.normal_at(point(0, 0, 0), {1, &p});
+            const Vector n2 = p.normal_at(point(10, 0, -10), {1, &p});
+            const Vector n3 = p.normal_at(point(-5, 0, 150), {1, &p});
             THEN("n1 = vector(0, 1, 0)") {
                 REQUIRE(n1 == vector(0, 1, 0));
             }

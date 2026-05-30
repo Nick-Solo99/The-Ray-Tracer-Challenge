@@ -8,7 +8,7 @@
 using namespace rtc::constants;
 
 namespace rtc::shapes::triangles {
-    Vector Triangle::local_normal_at(const Point &p) const {
+    Vector Triangle::local_normal_at(const Point &p, const intersections::Intersection& i) const {
         return normal;
     }
 
@@ -28,7 +28,7 @@ namespace rtc::shapes::triangles {
         if (v < 0 || u + v > 1) return {};
 
         const float t = f * dot(e2, origin_cros_e1);
-        return {{t, this}};
+        return {{t, this, u, v}};
     }
 
     const Bounds& Triangle::bounds() const {
@@ -44,5 +44,11 @@ namespace rtc::shapes::triangles {
         max.z = std::max({p1.z, p2.z, p3.z});
         cached_bounds = Bounds{min, max};
         return *cached_bounds;
+    }
+
+    bool Triangle::operator==(const Shape &other) const {
+        if (!Shape::operator==(other)) return false;
+        if (const auto o = dynamic_cast<const Triangle*>(&other); !o || p1 != o->p1 || p2 != o->p2 || p3 != o->p3) return false;
+        return true;
     }
 }

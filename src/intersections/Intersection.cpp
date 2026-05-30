@@ -19,7 +19,7 @@ namespace rtc::intersections {
 
         comps.point = ray.position(comps.t);
         comps.eye_v = -ray.direction;
-        comps.normal_v = comps.object->normal_at(comps.point);
+        comps.normal_v = comps.object->normal_at(comps.point, *this);
 
         if (dot(comps.normal_v, comps.eye_v) < 0.0f) {
             comps.inside = true;

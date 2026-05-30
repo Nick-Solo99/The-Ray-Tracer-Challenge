@@ -46,8 +46,8 @@ namespace rtc::shapes {
         bool virtual operator==(const Shape& other) const;
 
         [[nodiscard]] virtual std::vector<intersections::Intersection> intersect(const Ray& ray) const = 0;
-        [[nodiscard]] virtual Vector local_normal_at(const Point& p) const = 0;
-        [[nodiscard]] Vector normal_at(const Point& p) const;
+        [[nodiscard]] virtual Vector local_normal_at(const Point& p, const intersections::Intersection& i) const = 0;
+        [[nodiscard]] Vector normal_at(const Point& p, const intersections::Intersection& i) const;
         [[nodiscard]] virtual const Bounds& bounds() const = 0;
         virtual ~Shape() = default;
     };

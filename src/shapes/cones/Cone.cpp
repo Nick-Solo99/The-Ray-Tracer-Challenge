@@ -55,7 +55,7 @@ namespace rtc::shapes::cones {
         return xs;
     }
 
-    Vector Cone::local_normal_at(const Point &p) const {
+    Vector Cone::local_normal_at(const Point &p, const intersections::Intersection& i) const {
         const float dist = std::powf(p.x, 2) + std::powf(p.z, 2);
         if (dist < 1 && p.y >= maximum - EPSILON) return vector(0, 1, 0);
         if (dist < 1 && p.y <= minimum + EPSILON) return vector(0, -1, 0);

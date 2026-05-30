@@ -33,7 +33,7 @@ namespace rtc::shapes::spheres {
         return intersections::intersections({{t1, this},{t2, this}});
     }
 
-    Vector Sphere::local_normal_at(const Point& p) const {
+    Vector Sphere::local_normal_at(const Point& p, const intersections::Intersection& i) const {
         return p - point(0, 0, 0);
     }
 

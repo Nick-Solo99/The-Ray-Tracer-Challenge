@@ -11,7 +11,7 @@ namespace rtc::shapes::spheres {
     class Sphere final : public Shape {
         public:
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const Ray& ray) const override;
-        [[nodiscard]] tuples::Vector local_normal_at(const tuples::Point& p) const override;
+        [[nodiscard]] tuples::Vector local_normal_at(const tuples::Point& p, const intersections::Intersection& i) const override;
         [[nodiscard]] const Bounds& bounds() const override;
 
         //return a glass sphere

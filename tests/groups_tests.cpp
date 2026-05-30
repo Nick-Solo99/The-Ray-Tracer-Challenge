@@ -177,9 +177,32 @@ SCENARIO("Finding the normal on a child object") {
         s->transform = translation(5, 0, 0);
         g2_ptr->add_child(std::move(s));
         WHEN("n <- s.normal_at(point(1.7321, 1.1547, -5.5774))") {
-            const Vector n = s_ptr->normal_at(point(1.7321f, 1.1547f, -5.5774f));
+            const Vector n = s_ptr->normal_at(point(1.7321f, 1.1547f, -5.5774f), {1, g1.get()});
             THEN("n = vector(0.2857, 0.4286, -0.8571)") {
                 REQUIRE(n == vector(0.2857f, 0.4286f, -0.8571f));
+            }
+        }
+    }
+}
+
+SCENARIO("applying a material to a group applies it to all of its children") {
+    GIVEN("g <- group(), s1 <- sphere(), s2 <- sphere(), g.add_child(s1), g.add_child(s2)") {
+        auto g = std::make_unique<Group>();
+        auto s1 = std::make_unique<Sphere>();
+        Sphere* s1_ptr = s1.get();
+        auto s2 = std::make_unique<Sphere>();
+        Sphere* s2_ptr = s2.get();
+        g->add_child(std::move(s1));
+        g->add_child(std::move(s2));
+        WHEN("m <- Material(), m.color <- color(1, 0, 0), g.set_material(m)") {
+            Material m;
+            m.color = color(1, 0, 0);
+            g->set_material(m);
+            THEN("s1.material.color = color(1, 0, 0)") {
+                REQUIRE(s1_ptr->material.color == color(1, 0, 0));
+            }
+            AND_THEN("s2.material.color = color(1, 0, 0)") {
+                REQUIRE(s2_ptr->material.color == color(1, 0, 0));
             }
         }
     }

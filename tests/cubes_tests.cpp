@@ -196,7 +196,7 @@ SCENARIO("The normal on the surface of a cube") {
         const Cube c{};
         const Point p = point(1, 0.5f, -0.8f);
         WHEN("normal <- c.normal_at(p)") {
-            const Vector normal = c.normal_at(p);
+            const Vector normal = c.normal_at(p, {1, &c});
             THEN("normal = vector(1, 0, 0)") {
                 REQUIRE(normal == vector(1, 0, 0));
             }
@@ -206,7 +206,7 @@ SCENARIO("The normal on the surface of a cube") {
         const Cube c{};
         const Point p = point(-1, -0.2f, 0.9f);
         WHEN("normal <- c.normal_at(p)") {
-            const Vector normal = c.normal_at(p);
+            const Vector normal = c.normal_at(p, {1, &c});
             THEN("normal = vector(-1, 0, 0)") {
                 REQUIRE(normal == vector(-1, 0, 0));
             }
@@ -216,7 +216,7 @@ SCENARIO("The normal on the surface of a cube") {
         const Cube c{};
         const Point p = point(-0.4f, 1, -0.1f);
         WHEN("normal <- c.normal_at(p)") {
-            const Vector normal = c.normal_at(p);
+            const Vector normal = c.normal_at(p, {1, &c});
             THEN("normal = vector(0, 1, 0)") {
                 REQUIRE(normal == vector(0, 1, 0));
             }
@@ -226,7 +226,7 @@ SCENARIO("The normal on the surface of a cube") {
         const Cube c{};
         const Point p = point(0.3f, -1, -0.7f);
         WHEN("normal <- c.normal_at(p)") {
-            const Vector normal = c.normal_at(p);
+            const Vector normal = c.normal_at(p, {1, &c});
             THEN("normal = vector(0, -1, 0)") {
                 REQUIRE(normal == vector(0, -1, 0));
             }
@@ -236,7 +236,7 @@ SCENARIO("The normal on the surface of a cube") {
         const Cube c{};
         const Point p = point(-0.6f, 0.3f, 1);
         WHEN("normal <- c.normal_at(p)") {
-            const Vector normal = c.normal_at(p);
+            const Vector normal = c.normal_at(p, {1, &c});
             THEN("normal = vector(0, 0, 1)") {
                 REQUIRE(normal == vector(0, 0, 1));
             }
@@ -246,7 +246,7 @@ SCENARIO("The normal on the surface of a cube") {
         const Cube c{};
         const Point p = point(0.4f, 0.4f, -1);
         WHEN("normal <- c.normal_at(p)") {
-            const Vector normal = c.normal_at(p);
+            const Vector normal = c.normal_at(p, {1, &c});
             THEN("normal = vector(0, 0, -1)") {
                 REQUIRE(normal == vector(0, 0, -1));
             }
@@ -256,7 +256,7 @@ SCENARIO("The normal on the surface of a cube") {
         const Cube c{};
         const Point p = point(1, 1, 1);
         WHEN("normal <- c.normal_at(p)") {
-            const Vector normal = c.normal_at(p);
+            const Vector normal = c.normal_at(p, {1, &c});
             THEN("normal = vector(1, 0, 0)") {
                 REQUIRE(normal == vector(1, 0, 0));
             }
@@ -266,7 +266,7 @@ SCENARIO("The normal on the surface of a cube") {
         const Cube c{};
         const Point p = point(-1, -1, -1);
         WHEN("normal <- c.normal_at(p)") {
-            const Vector normal = c.normal_at(p);
+            const Vector normal = c.normal_at(p, {1, &c});
             THEN("normal = vector(-1, 0, 0)") {
                 REQUIRE(normal == vector(-1, 0, 0));
             }

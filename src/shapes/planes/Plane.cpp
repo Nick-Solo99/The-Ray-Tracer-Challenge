@@ -25,7 +25,7 @@ namespace rtc::shapes::planes {
         return intersections;
     }
 
-    Vector Plane::local_normal_at(const Point &p) const {
+    Vector Plane::local_normal_at(const Point &p, const intersections::Intersection& i) const {
         return vector(0, 1, 0);
     }
 

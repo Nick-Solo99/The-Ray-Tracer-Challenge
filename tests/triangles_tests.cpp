@@ -38,9 +38,9 @@ SCENARIO("Finding the normal on a triangle") {
     GIVEN("t <- triangle(point(0, 1, 0), point(-1, 0, 0), point(1, 0, 0))") {
         const Triangle t{point(0, 1, 0), point(-1, 0, 0), point(1, 0, 0)};
         WHEN("n1 <- t.normal_at(point(0, 0.5, 0)), n2 <- t.normal_at(point(-0.5, 0.75, 0)), n3 <- t.normal_at(point(0.5, 0.25, 0))") {
-            const Vector n1 = t.normal_at(point(0, 0.5, 0));
-            const Vector n2 = t.normal_at(point(-0.5, 0.75, 0));
-            const Vector n3 = t.normal_at(point(0.5, 0.25, 0));
+            const Vector n1 = t.normal_at(point(0, 0.5, 0), {1, &t});
+            const Vector n2 = t.normal_at(point(-0.5, 0.75, 0), {1, &t});
+            const Vector n3 = t.normal_at(point(0.5, 0.25, 0), {1, &t});
             THEN("n1 = t.normal") {
                 REQUIRE(n1 == t.normal);
             }

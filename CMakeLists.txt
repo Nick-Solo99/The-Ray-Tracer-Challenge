@@ -70,6 +70,8 @@ add_library(rtc_core
         src/parsers/Parsers.cpp
         src/parsers/Parsers.h
         src/scene/Scene.h
+        src/shapes/triangles/SmoothTriangle.cpp
+        src/shapes/triangles/SmoothTriangle.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -95,6 +97,7 @@ add_executable(tests
         tests/groups_tests.cpp
         tests/triangles_tests.cpp
         tests/obj_parser_tests.cpp
+        tests/smooth_triangles_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core

@@ -49,7 +49,7 @@ namespace rtc::shapes::cylinders {
         return xs;
     }
 
-    Vector Cylinder::local_normal_at(const Point &point) const {
+    Vector Cylinder::local_normal_at(const Point &point, const intersections::Intersection& i) const {
         const float dist = std::powf(point.x, 2) + std::powf(point.z, 2);
         if (dist < 1 && point.y >= maximum - EPSILON) return vector(0, 1, 0);
         if (dist < 1 && point.y <= minimum + EPSILON) return vector(0, -1, 0);

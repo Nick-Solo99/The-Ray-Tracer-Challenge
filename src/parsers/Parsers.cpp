@@ -8,6 +8,7 @@
 #include <ranges>
 #include <sstream>
 #include <shapes/triangles/Triangle.h>
+#include <shapes/triangles/SmoothTriangle.h>
 
 using namespace rtc::shapes::triangles;
 
@@ -33,14 +34,59 @@ namespace rtc::parsers {
                 float x, y, z;
                 ss >> x >> y >> z;
                 result->vertices.push_back(point(x, y, z));
+            } else if (symbol == "vn") {
+                float x, y, z;
+                ss >> x >> y >> z;
+                result->normals.push_back(vector(x, y, z));
             } else if (symbol == "f") {
-                std::vector<int> indices;
+                std::vector<int> v_indices;
+                std::vector<int> n_indices;
                 std::string token;
                 while (ss >> token) {
-                    indices.push_back(std::stoi(token));
+                    std::vector<int> values;
+                    auto slash_count = std::ranges::count(token, '/');
+                    if (slash_count == 0) {
+                        v_indices.push_back(std::stoi(token));
+                    } else if (slash_count == 1) {
+                        for (auto part : std::views::split(token, '/')) {
+                            std::string s(part.begin(), part.end());
+                            if (s.empty()) continue;
+                            values.push_back(std::stoi(s));
+                        }
+                        v_indices.push_back(values[0]);
+                    } else if (slash_count == 2){
+                        for (auto part : std::views::split(token, '/')) {
+                            std::string s(part.begin(), part.end());
+                            if (s.empty()) continue;
+                            values.push_back(std::stoi(s));
+                        }
+                        if (values.size() == 2) {
+                            v_indices.push_back(values[0]);
+                            n_indices.push_back(values[1]);
+                        } else {
+                            v_indices.push_back(values[0]);
+                            n_indices.push_back(values[2]);
+                        }
+                    }
                 }
-                for (int i = 1; i + 1 < indices.size(); ++i) {
-                    cur_group->add_child(std::make_unique<Triangle>(result->vertices[indices[0]], result->vertices[indices[i]], result->vertices[indices[i + 1]]));
+                for (int i = 1; i + 1 < v_indices.size(); ++i) {
+                    auto slash_count = std::ranges::count(token, '/');
+                    if (slash_count == 0 || slash_count == 1) {
+                        cur_group->add_child(std::make_unique<Triangle>(
+                            result->vertices[v_indices[0]],
+                            result->vertices[v_indices[i]],
+                            result->vertices[v_indices[i + 1]]
+                            ));
+                    } else if (slash_count == 2) {
+                        cur_group->add_child(std::make_unique<SmoothTriangle>(
+                                result->vertices[v_indices[0]],
+                                result->vertices[v_indices[i]],
+                                result->vertices[v_indices[i + 1]],
+                                result->normals[n_indices[0]],
+                                result->normals[n_indices[i]],
+                                result->normals[n_indices[i + 1]]
+                                ));
+                    }
                 }
             } else if (symbol == "g") {
                 std::string group_name;

@@ -17,7 +17,7 @@ namespace rtc::shapes::cylinders {
         float maximum = INFINITY;
         bool closed = false;
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const Ray& ray) const override;
-        [[nodiscard]] Vector local_normal_at(const Point& point) const override;
+        [[nodiscard]] Vector local_normal_at(const Point& point, const intersections::Intersection& i) const override;
         [[nodiscard]] const Bounds& bounds() const override;
     };
 

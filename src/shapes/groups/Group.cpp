@@ -10,7 +10,7 @@
 using namespace rtc::constants;
 
 namespace rtc::shapes::groups {
-    std::array<float, 2> Group::check_axis(const float &origin, const float &direction, const float& min, const float& max) const {
+    std::array<float, 2> Group::check_axis(const float &origin, const float &direction, const float& min, const float& max) {
         const float tmin_numerator = (min - origin);
         const float tmax_numerator = (max - origin);
         float tmin, tmax;
@@ -27,7 +27,7 @@ namespace rtc::shapes::groups {
         return { tmin, tmax };
     }
 
-    bool Group::intersects_bounds(const Ray &r, const Bounds &b) const {
+    bool Group::intersects_bounds(const Ray &r, const Bounds &b) {
         const auto& [min, max] = b;
         const auto [xtmin, xtmax] = check_axis(r.origin.x, r.direction.x, min.x, max.x);
         const auto [ytmin, ytmax] = check_axis(r.origin.y, r.direction.y, min.y, max.y);
@@ -55,7 +55,7 @@ namespace rtc::shapes::groups {
         return xs;
     }
 
-    Vector Group::local_normal_at(const Point &p) const {
+    Vector Group::local_normal_at(const Point &p, const intersections::Intersection& i) const {
         return vector(0, 1, 0);
     }
 
@@ -121,6 +121,16 @@ namespace rtc::shapes::groups {
 
     bool Group::contains(const Shape *shape) const {
         return std::ranges::any_of(shapes, [shape](const auto& ptr) {return ptr.get() == shape;});
+    }
+
+    void Group::set_material(const Material &material) const {
+        for (const auto& shape : shapes) {
+            if (const auto s = dynamic_cast<Group*>(shape.get())) {
+                s->set_material(material);
+            } else {
+                shape->material = material;
+            }
+        }
     }
 
     bool Group::operator==(const Shape &shape) const {
