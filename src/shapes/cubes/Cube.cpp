@@ -47,7 +47,7 @@ namespace rtc::shapes::cubes {
         return {{tmin, this}, {tmax, this}};
     }
 
-    Vector Cube::local_normal_at(const Point &p) const {
+    Vector Cube::local_normal_at(const Point &p, const intersections::Intersection& i) const {
         const float max_c = std::max({std::fabs(p.x), std::fabs(p.y), std::fabs(p.z)});
         if (max_c == std::fabs(p.x)) {
             return vector(p.x, 0, 0);
@@ -58,8 +58,12 @@ namespace rtc::shapes::cubes {
         return vector(0, 0, p.z);
     }
 
-    Bounds Cube::bounds() const {
-        return {{-1, -1, -1}, {1, 1, 1}};
+    const Bounds& Cube::bounds() const {
+        if (cached_bounds) {
+            return *cached_bounds;
+        }
+        cached_bounds = {{-1, -1, -1}, {1, 1, 1}};
+        return *cached_bounds;
     }
 }
 

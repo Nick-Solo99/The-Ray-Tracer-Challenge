@@ -25,11 +25,15 @@ namespace rtc::shapes::planes {
         return intersections;
     }
 
-    Vector Plane::local_normal_at(const Point &p) const {
+    Vector Plane::local_normal_at(const Point &p, const intersections::Intersection& i) const {
         return vector(0, 1, 0);
     }
 
-    Bounds Plane::bounds() const {
-        return {{-INFINITY, 0, -INFINITY}, {INFINITY, 0, INFINITY}};
+    const Bounds& Plane::bounds() const {
+        if (cached_bounds) {
+            return *cached_bounds;
+        }
+        cached_bounds = {{-INFINITY, 0, -INFINITY}, {INFINITY, 0, INFINITY}};
+        return *cached_bounds;
     }
 }

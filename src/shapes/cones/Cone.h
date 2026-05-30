@@ -16,8 +16,8 @@ namespace rtc::shapes::cones {
         void intersect_caps(const Ray& ray, std::vector<intersections::Intersection>& xs) const override;
     public:
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const Ray& ray) const override;
-        [[nodiscard]] Vector local_normal_at(const Point &p) const override;
-        [[nodiscard]] Bounds bounds() const override;
+        [[nodiscard]] Vector local_normal_at(const Point &p, const intersections::Intersection& i) const override;
+        [[nodiscard]] const Bounds& bounds() const override;
     };
 }
 

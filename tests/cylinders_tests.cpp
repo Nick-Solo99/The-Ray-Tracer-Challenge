@@ -83,7 +83,7 @@ SCENARIO("Normal vector on a cylinder") {
     GIVEN("cyl <- Cylinder()") {
         const Cylinder cyl{};
         WHEN("n <- cyl.normal_at(<origin>)") {
-            const Vector n = cyl.normal_at(origin);
+            const Vector n = cyl.normal_at(origin, {1, &cyl});
             THEN("n = <normal>") {
                 REQUIRE(n == normal);
             }
@@ -175,7 +175,7 @@ SCENARIO("The normal vector on a cylinders end caps") {
         cyl.maximum = 2;
         cyl.closed = true;
         WHEN("n <- cyl.normal_at(point(" << origin.x << ", " << origin.y << ", " << origin.z << "))") {
-            const auto n = cyl.normal_at(origin);
+            const auto n = cyl.normal_at(origin, {1, &cyl});
             THEN("n = vector(" << normal.x << ", " << normal.y << ", " << normal.z << ")") {
                 REQUIRE(n == normal);
             }

@@ -3,19 +3,21 @@
 //
 
 #include <catch2/catch_test_macros.hpp>
-
 #include "intersections/Intersection.h"
 #include "shapes/spheres/Sphere.h"
 #include <rays/Ray.h>
 #include <transformations/Transformations.h>
 #include "constants/Constants.h"
 #include <shapes/planes/Plane.h>
+#include <shapes/triangles/Triangle.h>
+
 using namespace rtc::shapes::spheres;
 using namespace rtc::intersections;
 using namespace rtc::rays;
 using namespace rtc::transformations;
 using namespace rtc::constants;
 using namespace rtc::shapes::planes;
+using namespace rtc::shapes::triangles;
 
 
 
@@ -369,6 +371,21 @@ SCENARIO("The schlick approximation with small angles and n2 > n1") {
             const float reflectance = schlick(comps);
             THEN("reflectance = 0.48873") {
                 REQUIRE((reflectance - 0.48873f) < EPSILON);
+            }
+        }
+    }
+}
+
+SCENARIO("An intersection can encapsulate 'u' and 'v'") {
+    GIVEN("s <- triangle(point(0, 1, 0), point(-1, 0, 0), point(1, 0, 0))") {
+        const Triangle s{point(0, 1, 0), point(-1, 0, 0), point(1, 0, 0)};
+        WHEN("i <- intersection(3.5, s, 0.2, 0.4") {
+            const Intersection i{3.5, &s, 0.2, 0.4};
+            THEN("i.u = 0.2") {
+                REQUIRE((i.u - 0.2f) < EPSILON);
+            }
+            AND_THEN("i.v = 0.4") {
+                REQUIRE((i.v - 0.4f) < EPSILON);
             }
         }
     }

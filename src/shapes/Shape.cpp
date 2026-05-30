@@ -22,9 +22,9 @@ namespace rtc::shapes {
         return (typeid(*this) == typeid(other) && transform == other.transform && material == other.material);
     }
 
-    Vector Shape::normal_at(const Point &p) const {
+    Vector Shape::normal_at(const Point &p, const intersections::Intersection& i) const {
         const Point local_point = world_to_obj(p);
-        const Vector local_normal = local_normal_at(local_point);
+        const Vector local_normal = local_normal_at(local_point, i);
         return normal_to_world(local_normal);
     }
 

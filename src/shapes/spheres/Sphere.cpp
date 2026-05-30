@@ -33,12 +33,16 @@ namespace rtc::shapes::spheres {
         return intersections::intersections({{t1, this},{t2, this}});
     }
 
-    Vector Sphere::local_normal_at(const Point& p) const {
+    Vector Sphere::local_normal_at(const Point& p, const intersections::Intersection& i) const {
         return p - point(0, 0, 0);
     }
 
-    Bounds Sphere::bounds() const {
-        return {{-1, -1, -1}, {1, 1, 1}};
+    const Bounds& Sphere::bounds() const {
+        if (cached_bounds) {
+            return *cached_bounds;
+        }
+        cached_bounds =  {{-1, -1, -1}, {1, 1, 1}};
+        return *cached_bounds;
     }
 
     Sphere Sphere::glass() {

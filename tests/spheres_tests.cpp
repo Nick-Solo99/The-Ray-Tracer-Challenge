@@ -212,7 +212,7 @@ SCENARIO("The normal on a sphere at a point on the x axis") {
         const Sphere s{};
 
         WHEN("n <- s.normal_at(point(1, 0, 0))") {
-            const Vector n = s.normal_at(point(1, 0, 0));
+            const Vector n = s.normal_at(point(1, 0, 0), {1, &s});
 
             THEN("n = vector(1, 0, 0)") {
                 REQUIRE(n == vector(1, 0, 0));
@@ -226,7 +226,7 @@ SCENARIO("The normal on a sphere at a point on the y axis") {
         const Sphere s{};
 
         WHEN("n <- s.normal_at(point(0, 1, 0))") {
-            const Vector n = s.normal_at(point(0, 1, 0));
+            const Vector n = s.normal_at(point(0, 1, 0), {1, &s});
             THEN("n = vector(0, 1, 0)") {
                 REQUIRE(n == vector(0, 1, 0));
             }
@@ -238,7 +238,7 @@ SCENARIO("The normal on a sphere at a point on the z axis") {
     GIVEN("s <- sphere()") {
         const Sphere s{};
         WHEN("n <- s.normal_at(point(0, 0, 1))") {
-            const Vector n = s.normal_at(point(0, 0, 1));
+            const Vector n = s.normal_at(point(0, 0, 1), {1, &s});
             THEN("n = vector(0, 0, 1)") {
                 REQUIRE(n == vector(0, 0, 1));
             }
@@ -250,7 +250,7 @@ SCENARIO("The normal on a sphere at a nonaxial point") {
     GIVEN("s <- sphere()") {
         const Sphere s{};
         WHEN("n <- s.normal_at(point(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3))") {
-            const Vector n = s.normal_at(point(std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f));
+            const Vector n = s.normal_at(point(std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f), {1, &s});
 
             THEN("n = vector(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3)") {
                 REQUIRE(n == vector(std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f));
@@ -263,7 +263,7 @@ SCENARIO("The normal is a normalized vector") {
     GIVEN("s <- sphere()") {
         const Sphere s{};
         WHEN("n <- s.normal_at(point(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3))") {
-            const Vector n = s.normal_at(point(std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f));
+            const Vector n = s.normal_at(point(std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f, std::sqrtf(3.0f) / 3.0f), {1, &s});
 
             THEN("n = normalize(n)") {
                 REQUIRE(n == normalize(n));
@@ -278,7 +278,7 @@ SCENARIO("Computing the normal on a translated sphere") {
         s.set_transform(translation(0, 1, 0));
 
         WHEN("n <- s.normal_at(point(0, 1.70711, -0.70711))") {
-            const Vector n = s.normal_at(point(0, 1.70711, -0.70711));
+            const Vector n = s.normal_at(point(0, 1.70711, -0.70711), {1, &s});
             THEN("n = vector(0, 0.70711, -0.70711))") {
                 REQUIRE(n == vector(0, 0.70711, -0.70711));
             }
@@ -293,7 +293,7 @@ SCENARIO("Computing the normal on a transformed sphere") {
         s.set_transform(m);
 
         WHEN("n <- s.normal_at(point(0, sqrt(2)/2, -sqrt(2)/2))") {
-            const Vector n = s.normal_at(point(0, std::sqrtf(2.0f)/2.0f, -std::sqrtf(2.0f)/2.0f));
+            const Vector n = s.normal_at(point(0, std::sqrtf(2.0f)/2.0f, -std::sqrtf(2.0f)/2.0f), {1, &s});
 
             THEN("n = vector(0, 0.97014, -0.24254") {
                 REQUIRE(n == vector(0, 0.97014, -0.24254));

@@ -91,7 +91,7 @@ SCENARIO("Computing the normal vector on a cone") {
     GIVEN("shape <- cone()") {
         const Cone shape{};
         WHEN("n <- shape.normal_at(point(" << origin.x << ", " << origin.y << ", " << origin.z << "))") {
-            const Vector n = shape.local_normal_at(origin);
+            const Vector n = shape.local_normal_at(origin, {1, &shape});
             THEN("n = vector(" << normal.x << ", " << normal.y << ", " << normal.z << ")") {
                 REQUIRE(n == normal);
             }
