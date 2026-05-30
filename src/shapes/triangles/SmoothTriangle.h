@@ -13,6 +13,7 @@ namespace rtc::shapes::triangles {
         Vector n1, n2, n3;
         SmoothTriangle(const Point& p1, const Point& p2, const Point& p3, const Vector& n1, const Vector& n2, const Vector& n3) : Triangle(p1, p2, p3), n1(n1), n2(n2), n3(n3) {};
         [[nodiscard]] Vector local_normal_at(const Point& p, const intersections::Intersection& i) const override;
+        [[nodiscard]] bool includes(const Shape& other) const override;
         [[nodiscard]] bool operator==(const Shape &other) const override;
     };
 }

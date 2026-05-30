@@ -19,6 +19,7 @@ namespace rtc::shapes::groups {
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const Ray& ray) const override;
         [[nodiscard]] Vector local_normal_at(const Point &p, const intersections::Intersection& i) const override;
         [[nodiscard]] const Bounds& bounds() const override;
+        [[nodiscard]] bool includes(const Shape& other) const override;
         void add_child(std::unique_ptr<Shape> shape);
         void cache_bounds() const;
         bool contains(const Shape* shape) const;

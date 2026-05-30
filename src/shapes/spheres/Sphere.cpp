@@ -45,6 +45,10 @@ namespace rtc::shapes::spheres {
         return *cached_bounds;
     }
 
+    bool Sphere::includes(const Shape &other) const {
+        return this == &other;
+    }
+
     Sphere Sphere::glass() {
         Sphere sphere;
         sphere.material.transparency = 1.0;

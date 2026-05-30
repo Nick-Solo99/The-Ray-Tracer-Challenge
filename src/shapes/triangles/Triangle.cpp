@@ -46,6 +46,10 @@ namespace rtc::shapes::triangles {
         return *cached_bounds;
     }
 
+    bool Triangle::includes(const Shape &other) const {
+        return this == &other;
+    }
+
     bool Triangle::operator==(const Shape &other) const {
         if (!Shape::operator==(other)) return false;
         if (const auto o = dynamic_cast<const Triangle*>(&other); !o || p1 != o->p1 || p2 != o->p2 || p3 != o->p3) return false;

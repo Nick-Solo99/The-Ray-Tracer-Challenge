@@ -17,6 +17,7 @@ namespace rtc::shapes::triangles {
         [[nodiscard]] Vector local_normal_at(const Point &p, const intersections::Intersection& i) const override;
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const rays::Ray& r) const override;
         [[nodiscard]] const Bounds& bounds() const override;
+        [[nodiscard]] bool includes(const Shape& other) const override;
         [[nodiscard]] bool operator==(const Shape& other) const override;
     };
 }

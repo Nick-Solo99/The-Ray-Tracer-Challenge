@@ -18,6 +18,7 @@ namespace rtc::shapes::cones {
         [[nodiscard]] std::vector<intersections::Intersection> intersect(const Ray& ray) const override;
         [[nodiscard]] Vector local_normal_at(const Point &p, const intersections::Intersection& i) const override;
         [[nodiscard]] const Bounds& bounds() const override;
+        [[nodiscard]] bool includes(const Shape &other) const override;
     };
 }
 

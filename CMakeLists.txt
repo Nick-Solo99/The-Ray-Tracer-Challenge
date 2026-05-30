@@ -72,6 +72,8 @@ add_library(rtc_core
         src/scene/Scene.h
         src/shapes/triangles/SmoothTriangle.cpp
         src/shapes/triangles/SmoothTriangle.h
+        src/shapes/csg/CSG.cpp
+        src/shapes/csg/CSG.h
 )
 
 target_include_directories(rtc_core PUBLIC src)
@@ -98,6 +100,7 @@ add_executable(tests
         tests/triangles_tests.cpp
         tests/obj_parser_tests.cpp
         tests/smooth_triangles_tests.cpp
+        tests/csg_tests.cpp
 )
 target_link_libraries(tests
         PRIVATE rtc_core
