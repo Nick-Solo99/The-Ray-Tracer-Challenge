@@ -36,4 +36,8 @@ namespace rtc::shapes::planes {
         cached_bounds = {{-INFINITY, 0, -INFINITY}, {INFINITY, 0, INFINITY}};
         return *cached_bounds;
     }
+
+    bool Plane::includes(const Shape &other) const {
+        return this == &other;
+    }
 }

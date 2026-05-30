@@ -65,6 +65,10 @@ namespace rtc::shapes::cubes {
         cached_bounds = {{-1, -1, -1}, {1, 1, 1}};
         return *cached_bounds;
     }
+
+    bool Cube::includes(const Shape &other) const {
+        return this == &other;
+    }
 }
 
 

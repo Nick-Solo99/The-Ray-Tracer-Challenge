@@ -63,4 +63,8 @@ namespace rtc::shapes::cylinders {
         cached_bounds = {{-1, minimum, -1}, {1, maximum, 1}};
         return *cached_bounds;
     }
+
+   bool Cylinder::includes(const Shape &shape) const {
+        return this == &shape;
+   }
 }

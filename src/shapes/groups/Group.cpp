@@ -67,6 +67,13 @@ namespace rtc::shapes::groups {
         return *cached_bounds;
     }
 
+    bool Group::includes(const Shape &other) const {
+        for (const auto& shape : shapes) {
+            if (shape->includes(other)) return true;
+        }
+        return false;
+    }
+
     void Group::add_child(std::unique_ptr<Shape> shape) {
         shape->parent = this;
         shapes.push_back(std::move(shape));

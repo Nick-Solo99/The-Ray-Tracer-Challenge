@@ -71,4 +71,8 @@ namespace rtc::shapes::cones {
         cached_bounds = {{-radius, minimum, -radius}, {radius, maximum, radius}};
         return *cached_bounds;
     }
+
+    bool Cone::includes(const Shape &other) const {
+        return this == &other;
+    }
 }

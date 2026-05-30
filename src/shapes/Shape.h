@@ -49,6 +49,7 @@ namespace rtc::shapes {
         [[nodiscard]] virtual Vector local_normal_at(const Point& p, const intersections::Intersection& i) const = 0;
         [[nodiscard]] Vector normal_at(const Point& p, const intersections::Intersection& i) const;
         [[nodiscard]] virtual const Bounds& bounds() const = 0;
+        [[nodiscard]] virtual bool includes(const Shape& other) const = 0;
         virtual ~Shape() = default;
     };
 }
